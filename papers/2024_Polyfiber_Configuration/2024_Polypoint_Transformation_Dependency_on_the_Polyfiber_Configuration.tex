@@ -1,0 +1,139 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainfont{TeX Gyre Termes}
+\newfontfamily\cyrillicfont{TeX Gyre Termes}
+\setdefaultlanguage{ukrainian}
+\setotherlanguage{english}
+\usepackage{amsmath,amssymb,geometry,graphicx}
+\geometry{margin=25mm}
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0.25em}
+\begin{document}
+\title{2024 Polypoint Transformation Dependency on the Polyfiber Configuration}
+\maketitle
+Iu.V. SYDORENKO, PhD (eng.), Assistant Professor, National Technical University
+\par
+Igor Sikorsky Kyiv Polytechnic Institute
+\par
+Beresteyskyi Avenue, 37, Kyiv, 03056,
+\par
+Ukraine, ORCID: https://orcid.org/0000-0002-1953-0410,
+\par
+O.S. KALENIUK, PhD (eng.), National Technical University of Ukraine
+\par
+Igor Sikorsky Kyiv Polytechnic Institute
+\par
+Beresteyskyi Avenue, 37, Kyiv, 03056, Ukraine, ORCID: https://orcid.org/0009-0009-3141-4840,
+\par
+M.V. HORODETSKYI (eng.), PhD student, National Technical University
+\par
+Igor Sikorsky Kyiv Polytechnic Institute
+\par
+Beresteyskyi Avenue, 37, Kyiv, 03056,
+\par
+Ukraine, ORCID: https://orcid.org/0000-0003-4673-3894,
+\par
+POLYPOINT TRANSFORMATION DEPENDENCY ON THE POLYFIBER CONFIGURATION
+\par
+Applying polypoint transformation to a triangle mesh is a promising technique that deserves extensive exploration. Unlike traditional deformation techiques used in 3D animation that are based on spatial interpolation, polypoint transformation transforms not a set of points or mesh vertices, but a polyfiber — a set of planes that form an object of transformation. This can be beneficial in practical applications such as computer animation, deformative modeling in CAD, or deformation prediction in additive manufacturing since, with polypoint transformation, the object of deformation includes the topological information about the mesh and not just its vertex positions. The way a polyfiber can form a triangle mesh is, however, an understudied problem.
+\par
+This problem gets easier to study if we start from a 2D case where a structure that corresponds to a triangle mesh in 3D is a polyline or a conotur made of line segments. For this structure we can decompose the study into a set of explorable questions one of them being: how the configuration of contour forming polyfiber affects the results of transformation, or, more specifically, how an angle between two lines forming a vertex affects the translation of that vertex under a polypoint transformation? Would this dependency prohibit the application of polypoint transformation to 3D mesh deformation? This article answers both questions.
+\par
+Keywords: polycoordinate mappings, polypoint transformations, polygonal geometry, transformation basis, transformation object, closed contour.
+\par
+The polypoint transformation is a transformation dual to polyfiber transformation. It was first proposed in 2000 by Badaev and Sydorenko
+\par
+1]. The basis for a polyfiber transformation is a set of lines in 2D space and a set of planes in 3D, the object of transformation is a set of points
+\par
+1]. A change in a basis transforms the object. For the dual transformation, the basis is a set of points, and the object of transformation is a set of lines in 2D and planes in 3D.
+\par
+There have been multiple proposals for how to represent a point object with lines and planes to make polypoint transformations applicable to deforming point objects [2], [3], [4]. There are however transformable objects represented not only by their points but by other primitives such as triangles. One of these objects is a triangle mesh. Applying polypoint transformations to triangle meshes is possible in two major ways: one applies the transformation to each vertex of the mesh in isolation, the vertex is then represented as an intersection of 3 independent planes; the other applies the polypoint transformation to all the triangles’ planes, and the vertices are then computed as points closest to all the deformed planes of its previously neighboring triangles
+\par
+sformation object specification can be expanded to represent a 3D triangle mesh. Then we can apply polypoint transformation to deform a triangle mesh and not just arbitrary polyfiber. This method of deformation will differ from conventional methods, such as RBF, or other methods of spatial interpolation
+\par
+6], because the information about the mesh topology is included in the polypoint transformation. The deformation concerns planes, and triangles that lie on these planes, and not just their vertices. This is the novelty of the proposed solution.
+\par
+At the same time, for any particular practical application, the very fact that the transformation of every point depends on its neighboring triangles and not only on its own position can serve as both negative and positive. We need to investigate how exactly the result of the deformation depends on the spatial configuration of the deformation object. How does the result of the contour point transformation depend on the relative orientation of its forming lines that undergo a polypoint transformation? To answer this question we conducted 2 experiments.
+\par
+Within the framework of this experimentation, a simplified case
+\par
+a contour in 2D is investigated. If the observed effect appears to prohibit applying polypoint transformations to 2D contours, then there is no reason to expand onto 3D triangle mesh polypoint transformation.
+\par
+Exploring the transformation of regular polygons
+\par
+In the first experiment, a transformation object is a contour of an n-edged regular polygon, the initial basis of a polypoint transformation is 5 points Bj, j
+\par
+1..5, regularly spaced around the object, and the transformed basis points Bj
+\par
+represent a transformation that combines scale and rotation.
+\par
+The contour points Pi are then formed by the neighboring edges of the n-edged regular polygon, i
+\par
+1..N. We measure how the result of the transformation of the first point P1 depends on the number of edges in the polygon and the angle the two neighboring edges form respectively, see figure 2.
+\par
+Fig 2. An initial basis and a contour to deform (left), both basises and a transformed contour (right)
+\par
+The motivation for this experiment is as follows. Any practical application of polypoint transformations for a 3D triangle mesh deformation requires that similar objects with different levels of detail
+\par
+7] should be deformed similarly. If we are handling several levels of detail of the same model simultaneously, then the deformation of these levels should not differ drastically. And this is the case we model with our experiment in 2D.
+\par
+We collected 9 data points each representing a deformation of the first contour point of a regular polygon. The data is represented in table
+\par
+The distance of a P1 transformation vector for the angle between its forming lines.
+\par
+Number of edges in a polygon
+\par
+The angle between P1 forming lines in radians
+\par
+The angle between P1 forming lines in degrees
+\par
+The distance between the initial and the transformed position of P1
+\par
+The same data is shown on a plot in figure 3.
+\par
+Fig 3. The dependency between the forming lines angle in P1 and the distance between the original point position and its position after the transformation
+\par
+So far, the data doesn’t show that the dependency the transformation has on the forming lines angle is prohibiting the algorithm's application in 3D. However, we only saw one acute angle in this experiment so we have to consider the evidence inconclusive. We need to explore sharp anglesvalues
+\par
+Exploring the transformation of an isosceles triangle
+\par
+In the following experiment, a deformation object is a single isosceles triangle made of vertices Pi, i
+\par
+1..3 with a variable vertex angle. As in the previous experiment, the initial basis of a polypoint transformation is also 5 points Bj, j
+\par
+1..5, regularly spaced around the object, and the transformed basis points Bj
+\par
+just as well represent a transformation that combines scale and rotation.
+\par
+An example of such an experiment is shown in figure 4.
+\par
+Fig 4. An initial basis and a triangle before deformation (left), both basises and a transformed triangle (right)
+\par
+We continue to investigate how the relative orientation of the lines forming the vertex affects the vertex’s transformation, but with an isosceles triangle, we can now look into sh
+\par
+ce between the initial and the transformed position of P1
+\par
+The same data is shown on a plot in figure 5.
+\par
+Fig 5. The distance between the original point position and its position after the transformation dependency on the vertex angle
+\par
+The data collected also shows that the dependency under question doesn’t seem to have a prohibiting effect on the usage of the algorithm for mesh deformation in 3D.
+\par
+method of transformation object specification, it doesn’t seem to be prohibiting its application in 3D mesh deformation.
+\par
+The trend the dependency data shows is nearly linear and unlikely to impact transformations of similar models with different levels of detail significantly.
+\par
+Badayev Iu.I. Sidorenko Iu.V. Deformacijne konstruyuvannya ob’yektiv vodnogo transportu za dopomogoyu politochkovih peretvoren. Vodnij transport, 2000 K.:KDAVT. pp.140–143
+\par
+Sidorenko Iu, Kryvda O., Leshchynska I. System of mo
+\par
+problemi modelyuvannya. 2019. – Vip.15. – pp. 151-161.
+\par
+Sidorenko Iu.V., Zalevs
+\par
+ka. 2020, vip.97
+\par
+Sydorenko Iu.V., Horodetskyi M.V.
+\par
+\end{document}

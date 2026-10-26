@@ -1,0 +1,155 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainfont{TeX Gyre Termes}
+\newfontfamily\cyrillicfont{TeX Gyre Termes}
+\setdefaultlanguage{ukrainian}
+\setotherlanguage{english}
+\usepackage{amsmath,amssymb,geometry,graphicx}
+\geometry{margin=25mm}
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0.25em}
+\begin{document}
+\title{2025 EM Methods of defining geometry of an object in three-dimensional space for polypoint transformations (Електронне моделювання)}
+\maketitle
+Methods of defining geometry of an object in three-dimensional space for polypoint transformations
+\par
+The article examines the application of polypoint transformations for modeling the deformation of three-dimensional triangular meshes. Three methods for representing the mesh geometry are proposed and analyzed: the intersection of the planes of a triangle and its normals, orthogonal planes for each vertex, and the intersection of the planes of adjacent triangles. An experimental study was conducted to evaluate the efficiency of each method in modeling two types of nonlinear deformations: twisting around the Z-axis and nonlinear volume expansion.
+\par
+The accuracy of shape recovery after deformation and the performance of the algorithms were evaluated. The research results showed that the best balance between accuracy and speed is achieved by the method of defining vertices through the intersection of the planes of adjacent triangles. At the same time, its limitations were analyzed, particularly its dependence on the non-parallelism of planes, and the use of the Moore-Penrose pseudoinverse matrix was proposed to resolve ambiguities in the transformations.
+\par
+Keywords: polycoordinate mappings, polypoint transformations, polygonal geometry, transformation basis, transformation object.
+\par
+The object of polypoint transformations (PPT) is a line in a plane and a plane in three-dimensional space. Accordingly, the application of polypoint transformations for modeling the deformation of a three-dimensional triangle mesh requires representing the mesh as a set of planes. There are several ways to achieve such a representation, each with its own advantages and disadvantages [1]. This paper presents a comparative analysis of three methods for defining geometry in the construction of a polypoint transformation object. The study [2] examines the problem statement and methods for implementing polypoint transformations.
+\par
+The study [3] proposes a method of polypoint three-dimensional mappings of triangles for geometric modeling of complex objects. The difference between this method and conventional polypoint transformations is the ability to define the preimage not as implicit planes but as a set of triangles in three-dimensional space, obtaining the transformed object as a set of transformed triangles.
+\par
+When working with polypoint transformations, there arises a need to restore the shape of the object after the transformation. As a result of the algorithm’s operation, a set of points is formed, which must be connected into a continuous curve. This can be done in various ways, including using a seventh-degree Bйzier interpolation polynomial that accounts for curvature and torsion at the interpolation nodes [4] or using Catmull-Rom and Kochanek-Bartels splines due to their property of being closed-loop
+\par
+5]. Other two approaches were proposed by Badayev Yu .I. and Lagodina L.P., which consist of using a rational Bйzier curve and an NURBS curve for interpolation [6] and approximation [7] of a set of discrete points.
+\par
+In study [8], a modified algorithm for defining the geometry of the transformed object through an enclosed space on a plane was proposed and tested at various standard angles. It was shown that the proposed method does not affect vertex displacement after deformation or has an insignificant impact.
+\par
+First method. Intersection of the planes of the triangle and its normals
+\par
+The first approach involves representing each triangle as four planes: the plane of the triangle itself and three planes formed by the triangle's normal and its edges (Fig. 1). A vertex is defined as the intersection of the triangle's plane with two other planes formed by its edges
+\par
+The main issue with this approach is that each triangle is transformed separately, and after mesh deformation, vertices that were shared before deformation may shift independently. This leads to a loss of the mesh’s topological integrity and the appearance of gaps. To overcome this drawback, it is proposed to define the transformation of a vertex shared by multiple triangles as the arithmetic mean of the corresponding coordinates of all individual vertices that result from the deformation of each triangle separately (Fig. 1).
+\par
+Fig. 1. The process of transforming vertex A into A
+\par
+using the separate triangles method
+\par
+formation. A' is the vertex A after the deformation of the object.
+\par
+Second method. Orthogonal planes for each vertex
+\par
+In the second approach, each vertex is defined as the intersection of three orthogonal planes. During deformation, these planes may change their tilt angles, but they remain non-parallel, which ensures the uniqueness of the vertex.
+\par
+Although this method preserves the topology of the mesh (Fig. 2), it does not take into account the geometric context of the triangles to which the vertex belongs, which may lead to inaccuracies in shape recovery after deformation. The deformation result depends on the choice of orthogonal planes assigned to each vertex and, consequently, on the choice of the coordinate system.
+\par
+Fig. 2. The process of transforming vertex A into A
+\par
+defined by orthogonal planes
+\par
+e planes of adjacent triangles
+\par
+In this method, each vertex is defined as the intersection point of the planes of the triangles adjacent to it. This approach preserves both the topology of the mesh and its local geometry.
+\par
+During deformation, these planes change, and in the case of three adjacent triangles, the new vertex is determined as the intersection of the corresponding transformed planes. However, if a vertex is shared by four or more triangles, an exact intersection point generally does not exist. In such cases, the vertex is computed as the point that minimizes the sum of squared distances to all transformed planes
+\par
+that is, the point that is closest to all transformed planes simultaneously.
+\par
+Fig. 3. The process of transforming vertex A into A
+\par
+using the intersecting planes method
+\par
+In the Figure 3, Plane1, Plane2, and PlaneN are the planes formed by
+\par
+an of its coordinates obtained after transforming each triangle separately. This ensures consistent placement of shared vertices.
+\par
+In the second method, the choice of orthogonal planes is made in such a way as to simplify the calculations. Three planes were used: (1, 0, 0, -x), (0, 1, 0, -y), and (0, 0, 1, -z), which allowed for the determination of new vertex coordinates after the transformation.
+\par
+Since in the third method situations may arise where the intersection point of the planes is not uniquely defined, it is proposed to use the Moore-Penrose pseudoinverse matrix
+\par
+8]. This allows for finding the optimal vertex position even in complex cases.
+\par
+This study did not address the vulnerabilities of this method
+\par
+specifically, the requirement that at least three of the adjacent triangle planes must be non-parallel. In cases where these planes are parallel or equivalent due to a shared vertex, defining the vertex by their intersection becomes impossible. Similarly, the intersection of only two non-parallel planes results in a line rather than a specific point, preventing the method’s application. These two cases necessitate an alternative approach for vertex definition or even a different deformation modeling strategy altogether.
+\par
+To evaluate the effectiveness of the methods, experiments were conducted on a torus model consisting of 300 triangles and 160 vertices. The object was deformed using polypoint transformations, after which the obtained vertices were compared with the reference model.
+\par
+The object was subjected to deformation described by the equation
+\par
+where x, y, z – the coordinates of the original point, Xs Ys Zs – the coordinates of the transformed point,
+\par
+This deformation corresponds to the twisting of the object around the Z-axis. The coefficient d controls the intensity of the twisting. The smaller d is, the more the object twists. In the experiment, d ranges from [15; 2].
+\par
+The root mean square error (RMSE) between the vertices of the object transformed by polypoint transformations with four different geometry representation methods and the vertices of the reference-deformed object was measured. The results of the experiment are presented in the graph (Fig. 4-6).
+\par
+Fig. 4. Graph of the RMSE dependency on the divisor
+\par
+Fig. 5. Torus model after simulating the twisting deformation with d
+\par
+6, with vertex representations using all three methods
+\par
+Fig. 6. Torus model after simulating the twisting deformation with d
+\par
+2, with vertex representations using all three methods
+\par
+The Figures 5-6 show the torus models after applying polypoint transformations with a divisor d
+\par
+The deformation of non-uniform volume growth is modeled by the equation
+\par
+ed in the graph (Fig. 7-9).
+\par
+Fig. 7. Graph of the RMSE dependency of the deformation model on f during non-uniform volume growth
+\par
+In the Figure 7, the dependency of the root mean square error (RMSE) on the parameter f is shown for each of the vertex representation methods.
+\par
+Fig. 8 – Torus model after simulating the non-uniform volume growth deformation with
+\par
+0.5, with vertex representations using all three methods
+\par
+Fig. 9 – Torus model after simulating the non-uniform volume growth deformation with
+\par
+1.0, with vertex representations using all three methods
+\par
+The Figures 8-9 visualize the polypoint transformations with parameters
+\par
+Additionally, the average execution time was measured.
+\par
+Average execution time of the torus model deformation using four methods
+\par
+Average Deformation Time (ms)
+\par
+In the table presented the execution time of the deformation using the polypoint transformation method with all the geometry representation methods, as well as the RBF method.
+\par
+The analysis of methods of defining geometry of an object has shown that the most promising approach, considering the balance between nonlinear deformation modeling accuracy and computational efficiency, is defining triangle mesh vertices through the intersection of planes of triangles adjacent to the vertex. In the first experiment, at d
+\par
+10, the deformation error does not significantly differ between Methods 2 and 3. However, for d in [9; 2], the error of Method 3 is twice as small as that of Method 2 and three times smaller than that of Method 1. In the second experiment, for f in [0.2;
+\par
+1.0], Method 3 similarly demonstrates a lower RMSE compared to Methods 2 and 1
+\par
+by a factor of two and three, respectively.
+\par
+Moreover, the transformation of an individual vertex, represented by the intersection of planes, is unambiguous only when exactly three planes remain non-parallel after transformation. In this study, the use of the Moore-Penrose pseudoinverse matrix was proposed to ensure uniqueness in cases with more than three planes.
+\par
+Cheng, S.-W., Dey, T. K., \& Shewchuk, J. (2016). Delaunay Mesh Generation. CRC Press. https://books.google.com.ua/books?id
+\par
+Badaev, Y. \& Sidorenko, Y. (2020). Geometric modeling of complex objects on the basis of tile mapping displays of direct cuts. Modern problems of modeling, (16),
+\par
+17-24. doi: 10.33842/2313-125X/2019/16/17/24.
+\par
+Kolot, O.L. \& Badaev, Y. (2019). Geometric modeling of complex objects based on point-based three-dimensional transformations of triangles. Modern problems of modeling,(13), 76-83. https://magazine.mdpu.org.ua/index.php/spm/article/view/2647
+\par
+Badaiev, Y. I. \& Hannoshyna, I. M. (2016). Design of a spatial curve, taking into account curvature and difficulties in nodes of interpolation method. Visnyk of Vinnytsia Politechnical Institute, (4), 80-83.
+\par
+Ausheva, N. \& Humennyi, A. (2021). Modeling of fundamental splines in the form of quaternion curves. Modern problems of modeling, (20), 20-27.
+\par
+Badayev, Y. \& Lagodina, L. (2020). Interpolation by rational surfases of bezier and nurbs-surfases. Modern problems of modeling, (19), 11-16.
+\par
+Badayev, Y. I. \& Lagodina, L. (2020). Approximation by rational surfases of bezier and nurbs-surfases. Modern problems of modeling, (18), 11-17
+\par
+\end{document}

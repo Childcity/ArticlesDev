@@ -1,0 +1,80 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainfont{TeX Gyre Termes}
+\newfontfamily\cyrillicfont{TeX Gyre Termes}
+\setdefaultlanguage{ukrainian}
+\setotherlanguage{english}
+\usepackage{amsmath,amssymb,geometry,graphicx}
+\geometry{margin=25mm}
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0.25em}
+\begin{document}
+\title{2022 ОСОБЛИВОСТІ РОЗТАШУВАННЯ БАЗИСНИХ ВУЗЛІВ ГАУС-ФУНКЦІЇ ВАК}
+\maketitle
+151 УДК 514.18
+\par
+PECULIARITIES OF LOCATION OF BASIC NODES OF HOUSE- FUNCTION ON THE EXAMPLE OF SPIRAL-CURVED CURVES
+\par
+Sydorenko Iu., Candidate of Technical Sciences, sulico5.@kpi.ua, ORCID: 0000-0002-1953-0410 Zalevska O., Candidate of Technical Sciences, o.zalevska@kpi.ua, ORCID: 0000-0002-3163-1695 Horodetskyi M., o.zalevska@kpi.ua, ORCID: 0000-0003-4673-3894 National Technical University of Ukraine “Igor Sikorsky Kyiv Polytechnic Institute name Igor Sikorsky” (Ukraine) Naidysh А., Doctor of Technical Sciences, nav1304@ukr.net, ORCID: 0000-0003-4057-7085 Bogdan Khmelnitsky Melitopol State Pedagogical University (Ukraine)
+\par
+In the article the interpolation errors of spiral curves were analyzed on the example of a Litus spiral using developed software product. There is a problem of large error with a sharp change in distances between nodes when interpolating using Gaussian function method. This problem was solved by changing th e standard calculation of the coefficient α, and by introducing a "fake" interpolation node. The article considers the basis points location influence on the relative interpolation error by the Gaussian interpolation function. There are several examples of favorable and unfavorable basis points location to minimize interpolation error in interpolation methods based on Gaussian functions. The research was carried out on the example of spiral curves. The results of interpolation by Gaussian methods are compared with the Lagrange method using the Litus spiral as example. Spiral curves interpolation problems are important for the design of outdoor and car routes, planning for robots, planning a route for drones and low -power industrial devices. In addition, it is important that an interpolation method is stable to the inhomogeneous basis points location, which are the input parameters for interpolation. The shape of the Gaussian interpolation curve is influenced by the coefficient . The conventional ratio can be changed if the results exceed the specified accuracy. To avoid a large error, it is recommended to make additional "false" basis points. To automate the process of selecting the coefficient  and using a "fake" node to reduce the interpolation error was a reason of creating a system for studying spiral functions interpolation. The research was conducted together with a software application development using C\# programming language with the .Net Core 3.1 framework
+\par
+152 involved. The application displays the results of experiments in real time and has a graphical interface required for research. Key words: interpolation, Gaussian interpolation, interpolation error, Litus spiral.
+\par
+Statement of problem. Classical interpolation methods are usually used to process unique curves when one x corresponds to one y. In case of spiral curves, classical methods can also be used, but only in cases where the interpolation nodes are located at approximately the same distance from each other, there are no sharp transitions [2], the curvature and number of nodes is small because a large number of nodes increases the degree of interpolation polynomial, as it directly depends on it. This causes unnecessary oscillations, which makes it impossible to work with such interpolation results. Therefore , it is necessary to interpolate spiral curves using parametric Gaussian functions. Recent research and publication analysis . Previous publications have considered the guided clothoid spline [1], an arc spline approximation to a clothoid [2], reactive nonholonomic trajectory generation via parametric optimal control [3]. Path planning and state estimation for unmanned aerial vehicles in hostile environments [4] and constant peed interpolating paths [5]. Also, we analyzed interpolation algorithm, based on Ga ussian method using elementary algebraic functions as testing data [6] and construction of smooth lines using parameterized Gaussian functions [7]. Setting article objectives . To automate the process of selecting the coefficient  and using a "fake" node t o reduce the interpolation error was a reason of creating a system for studying spiral functions interpolation. Main part. We set the problem of parametric interpolation as the problem of constructing such two functions Х(t), Y(t) that for some values of the parameter ti take predetermined values x(і), y(і):
+\par
+        x , y   i i ti iY t X (1) where і є [1, N]. Let's set ti = i, because for this statement of the problem it is enough that ti creates a monotonic sequence of numbers. We assume that the following two functions:     x , () ()    i X t y i Y t
+\par
+satisfy conditions (1), then the traditional problem of constructing an interpolation polynomial is formulated as the problem of constructing a polynomial y=G(x) , where х = t, G(t) — density function of the normal distribution law in case of Gaussian polynomial [6,7]. The parametric interpolation problem is solved with the help of two
+\par
+153 Gaussian polynomials from the parameter of curvature line length i             1 1 X , Y               n j j n j j x yyi xit t
+\par
+where           22 , 1 ,, jja x x a y y j j j j Nx e y єe jyx     
+\par
+and two Lagrange polynomials from the parameter of curvature line length i         1 1, 1 1, X , Y                       nn k j j j k j jk nn k j j j k j jk x yyi xit t
+\par
+Consider an interpolation polynomial given by the Lituus spiral curve [5] with an unevenly distributed interpolation step [6] (Fig . 1). Variable  is selected as in previous research [7] 2 max min ( 1) ,()    n xx
+\par
+where хmax, xmin — maximum and minimum value of х.
+\par
+Fig. 1. Interpolation of the Litus spiral by the Gaussian function
+\par
+154 The Litus spiral was c hosen because between the first and second basis points you can see a fairly large distance relative to the distances between the points from the third to the fifteenth. This arrangement of points is quite unpredictable for the method of setting the parame ter , due to which the accuracy of the interpolation polynomial in the area of the second and third basis points deteriorates (Fig. 1). This disadvantage is also inherent in the Lagrange polynomial, but the error in this case is several orders of magnitude greater. To reduce the interpolation error by the Gaussian function, in this study it is proposed to take into account the non -uniformity of the reference points before choosing the coefficient . Depending on convexity of the curve at a point, decrease or increase it by the corresponding delta. ',  
+\par
+where δ— selected value by which you want to decrease or increase the standard variable. Fig. 2 shows the results of interpolation by the Gaussian function
+\par
+\[at \delta = 0.169.\]
+Fig. 2. Interpolation of the Litus spiral with a changed coefficient 
+\par
+Thus, it c an be noted that the standard coefficient  is sometimes impractical to use, as it can give significant errors in the presence of jumps between some basis points, which necessitates reducing or increasing the value
+\par
+155 of the coefficient to reduce the error of the interpolation polynomial. To reduce the interpolation error, can be introduced the concept of "fake" or "distorted" interpolation node. To do this, it is needed to determine the segment where a large error jump occurs and enter as a given auxiliary no de, which will be calculated as the middle of the segment between two adjacent points where a large error occurred.
+\par
+The Gaussian interpolation function with "false" interpolation nodes is presented in Fig. 3.
+\par
+Fig. 3. Interpolation of the Litus spiral without noticeable jumps between nodes
+\par
+In the figure we can see Gaussian interpolation polynomial, without pronounced jumps between interpolation nodes, repeats the shape of the Litus spiral with high accuracy. Conclusions. The interpolation errors of sp iral curves were analyzed on the example of a Litus spiral using developed software product. There is a problem of large error with a sharp change in distances between nodes when interpolating using Gaussian function method. This problem was solved by changing the standard calculation of the coefficient α, and by introducing a "fake" interpolation node.
+\par
+Literature 1. D.S. Meek, R.S.D. Thomas. A guided clothoid spline. Comput. Aided Geom. Des., 8 (1991), pp. 163-174
+\par
+156 2. D.S. Meek, D.J. Walton. An arc spline approximation to a clothoid. J. Comput. Appl. Math., 170 (2004), pp. 59-77 3. K. Alonzo, N. Brian. Reactive nonholonomic trajectory generation via parametric optimal control. Int. J. Robot. Res., 22 (2003), pp. 583-601 4. R. Dai, J.E. Cochran Jr. Path planning and state estimation for unmanned aerial vehicles in ho stile environments. J. Guid. Control Dyn., 33 (2) (2010), pp. 595-601. 5. J.R. Looker. Constant Speed Interpolating Paths. DSTO Defence Science and Technology Organisation (2011). AR 014-939. DSTO-TN-0989 6. Городецький М.В. , Сидоренко Ю.В. Аналіз роботи алгоритму інтерполяційної функції Гауса на елементарних алгебричних функціях . Сучасні проблеми моделювання . Технічні науки. Мелітополь, 2020. Вип.19. С.138-146. 7. Сидоренко Ю.В. Побудова гладких ліній за допомог ою параметризованих функцій Гауса . Прикладна геометрія та інженерна графіка. К.;КДТУБА, 2001, Вип. 69. С. 63-67.
+\par
+ОСОБЕННОСТИ РАСПОЛОЖЕНИЯ БАЗИСНЫХ УЗЛОВ ГАУС- ФУНКЦИИ НА ПРИМЕРЕ СПИРАЛЕПОДОБНЫХ КРИВЫХ Сидоренко Ю.В., Залевская О.В., Городецкий Н.В., Найдыш А.В.
+\par
+В статье анализируются ошибки интерполяции спиральных кривых на примере спирали Литуса с использованием разработанного программного продукта. Существует проблема большой погрешности при резком изменении расстояний между узлами при интерполяции методом функции Гаусса. Эта проблема была решена изменением коэффициента α и введением « фальшивого» узла интерполяции. В статье рассматривается влияние расположения базисных точек на относительную погрешность интерпол яции способом интерполяционной Гаусс-функции. Приводится несколько примеров благоприятного и неблагоприятного расположения базисных точек для минимизации погрешности интерполяции в интерполяционных методах, основанных на Гаусс-функции. Исследования проводились на примере спиралевидных кривых. Ре зультаты интерполяции методами Гаусса -функции сравниваются с методом Лагранжа на примере спирали Литуса. Проблемы интерполирования спиралевидных кривых важны для проектирования железнодорожных и автомобильных путей, планирования движения роботов, планирования маршрута для военных самолетов, дронов и беспилотных летательных аппаратов. Кроме того, важна устойчивость интерполяционного метода к неоднородному расположению базисных точек, которые являются входными параметрами для проведения интерполяции.
+\par
+157 На форму интерполяционной кривой Гаусса влияет коэффициент .. Общепринятый коэффициент может изменяться, если результаты превышают заданную точность. Например, при наличии больших отклонений между расстояниями до базисных точек возникает необходимость уменьшать или увеличивать значение коэффициента для уменьшения погрешности интерполяционного полинома. Во избежание большой погрешности рекомендуется вносить дополнительные «фальшивые» базисные точки таким образом, чтобы избежать скачков между некоторыми узлами интерполяции. Целью создания системы для исследований интерполяции спиралевидных функций было автоматизирова ть процесс подбора коэффициента , и использование «фальшивого» узла для уменьшения погрешности интерполяции. Ключевые слова: интерполяция, интерполяционная функция Гаусса, погрешность интерполяции, спираль Литуса.
+\par
+ОСОБЛИВОСТІ РОЗТАШУВАННЯ БАЗИСНИХ ВУЗЛІВ ГАУС-ФУНКЦІЇ НА ПРИКЛАДІ СПІРАЛЕПОДІБНИХ КРИВИХ
+\par
+Сидоренко Ю.В., Залевська О.В., Городецький М.В., Найдиш А.В.
+\par
+У статті проаналізовано похибки інтерполяції спіральних кривих на прикладі спіралі Litus за допомогою розробленого програмного продукту. Існує проблема великої похибки з різкою зміною відстаней між вузлами при інтерполяції методом функції Гаусса. Ця проблема була вирішена шляхом зміни стандартного розрахунку коефіцієнта α та введенням « фальшивих» вузлів інтерполяції. У статті розглядається вплив розташування базисних точок на відносну похибку інтерполяції способом інтерполяційної Гаус -функції. Наводиться декілька прикладів сприятливого та несприятливого розташування базисних точок для мінімізації похибки інтерполяції в інтерполяційних методах, які базуються на Гаус -функції. Дослідження проводилися на прикладі спіралеподібних кривих. Результати інтерполяції методами Гаус-функції порівнюються з методом Лагранжа на прикладі спіралі Літуса. Проблеми інтерполяції спіралеподібних кривих важливі для проектування залізничних та автомобільних шляхів, планування руху роботів, планування маршруту для військових літаків, дронів та безпілотних літальних апаратів. Крім того, важливою є стійкість інтерполяційного методу до неоднорідного розташування базисних точок, які є вхідними параметрами для проведення інтерполяції. На форму інтерполяційної кривої Гауса впливає коефіцієнт  . Загальноприйнятий коефіцієнт може бути зміненим, якщо результати
+\par
+158 перевищують задану точність. Наприклад, при наявності великих відхилень між відстанями до базисних точок, виникає необхідність зменшувати або збільшувати значення коефіцієнту для зменшення похибки інтерполяційного поліному. Для уникнення великої похибки рекомендується вносити додаткові «фальшиві» базисні точки таким чином, щоб уникнути стрибків між деякими вузлами інтерполяції. Метою створення системи для досліджень інтерполяції спіралеподібних функцій було автоматизувати процес підбору коефіцієнта  та використання «фальшивого» вузла для зменшення похибки інтерполяції. Дослідження проводились разом з розробкою програмного додатку на мові програмування С\# з використанням фреймворку .Net Core 3.1. Додаток відображає результати експериментів в режимі реального часу та має графічний інтерфейс, необхідний для проведення дослідженнь. Ключові слова: інтерполяція, інтерполяційна функція Гауса, похибка інтерполяції, спіраль Літуса.
+\par
+Referenses 1. D.S. Meek, R.S.D. Thomas. (1991) A guided clothoid spline. Comput. Aided Geom. Des., 8, 163-174. [in English] 2. D.S. Meek, D.J. Walton. (2004) An arc spline approximation to a clothoid. J. Comput. Appl. Math., 170, 59-77. [in English] 3. K. Alonzo, N. Brian. (2003) Reactive nonholonomic tr ajectory generation via parametric optimal control. Int. J. Robot. Res., 22, 583-601. [in English] 4. R. Dai, J.E. Cochran Jr. (2010) Path planning and state estimation for unmanned aerial vehicles in hostile environments. J. Guid. Control Dyn., 33 (2), 595-601. [in English] 5. J.R. Looker. (2011) Constant Speed Interpolating Paths. DSTO Defence Science and Technology Organisation AR 014-939. DSTO-TN-0989 6. Sydorenko Iu.V., Horodetskyi M.V. (2020) Analysis of the gauss interpolation function algorithm on elementary algebraic functions. Suchasni problemy modelyuvannya. Melitopol. 19, 138-146. [in Ukrainian] 7. Sydorenko Iu.V. (2021) Constructing smooth lines using parameterized Gauss functions. Prykladna geometriya ta inzhenerna grafika. К.;КDTUBA, 69, 63-67. [in Ukrainian]
+\par
+\end{document}

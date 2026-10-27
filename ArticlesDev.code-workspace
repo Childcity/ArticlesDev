@@ -4,5 +4,26 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"cSpell.language": "en,uk",
+		"cSpell.import": [
+			"https://cdn.jsdelivr.net/npm/@cspell/dict-uk-ua/cspell-ext.json",
+			"https://cdn.jsdelivr.net/npm/@cspell/dict-scientific-terms-us/cspell-ext.json"
+		],
+		"cSpell.words": [
+			"ArticlesDev",
+			"Gauss",
+			"Horodetskyi",
+			"NeRF",
+			"Polypoint",
+			"Runge",
+			"Sydorenko",
+			"XeLaTeX"
+		]
+	},
+	"extensions": {
+		"recommendations": [
+			"streetsidesoftware.code-spell-checker"
+		]
+	}
 }

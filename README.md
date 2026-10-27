@@ -1,73 +1,61 @@
 # ArticlesDev
 
-This repository stores papers in `papers/` and includes a script to convert the source documents into UTF-8 LaTeX files. The generated documents use **XeLaTeX** for Ukrainian, other Unicode text, and formulas.
+This repository contains research papers and a converter that creates UTF-8 LaTeX files from source documents in `papers/`. Generated documents support Ukrainian and other Unicode text and should be compiled with XeLaTeX.
 
-## Install for local Windows use
+## Set up on Debian 13 (Codex Cloud)
 
-Install:
-
-- **Python 3.11 or newer**
-- **MiKTeX**, including the XeLaTeX engine; the script detects the standard Windows install path, or you can add its `miktex\bin\x64` directory to `PATH`
-- **7-Zip** and add its installation folder to `PATH` if you need to convert legacy `.doc` files
-
-In MiKTeX, allow it to install missing packages when prompted. The documents use `fontspec`, `polyglossia`, `amsmath`, `amssymb`, `geometry`, `graphicx`, and the TeX Gyre Termes font (`tex-gyre` MiKTeX package).
-
-Set up the Python environment from the repository root:
-
-```powershell
-py -m venv .venv
-.venv\Scripts\python.exe -m pip install -r src\requirements-papers-to-latex.txt
-```
-
-Generate or regenerate the LaTeX files:
-
-```powershell
-.venv\Scripts\python.exe src\papers_to_latex.py papers
-```
-
-To generate and compile them with XeLaTeX:
-
-```powershell
-.venv\Scripts\python.exe src\papers_to_latex.py papers --compile
-```
-
-For a book or proceedings folder, pass the article title if automatic title matching selects the wrong article:
-
-```powershell
-.venv\Scripts\python.exe src\papers_to_latex.py papers --paper-title "Folder_Name=Article Title"
-```
-
-## Install for Codex Cloud
-
-Codex Cloud tasks use a separate remote environment; they cannot use MiKTeX or other programs installed on your PC. When creating the Codex Cloud environment for this GitHub repository, ask Codex to install and verify **TeX Live with XeLaTeX**. Codex Cloud saves the tested install script with the published environment, and new cloud tasks start from that setup.
-
-For a Debian/Ubuntu-based environment, install these system packages:
+From the repository root, install the system tools and Python dependencies:
 
 ```bash
-apt-get update
-apt-get install -y \
-  python3 python3-venv \
-  p7zip-full \
-  texlive-xetex texlive-latex-recommended texlive-latex-extra texlive-lang-cyrillic \
-  fonts-texgyre
-```
+cd /workspace/ArticlesDev
 
-If the cloud task will regenerate papers from DOCX/PDF/DOC sources, also install the Python dependencies:
+. /etc/os-release
+apt_sources="$(mktemp)"
+trap 'rm -f "$apt_sources"' EXIT
+cat >"$apt_sources" <<EOF
+deb https://deb.debian.org/debian ${VERSION_CODENAME} main
+deb https://deb.debian.org/debian-security ${VERSION_CODENAME}-security main
+EOF
 
-```bash
+apt-get -o Dir::Etc::sourcelist="$apt_sources" \
+  -o Dir::Etc::sourceparts=- -o APT::Get::List-Cleanup=0 update
+apt-get -o Dir::Etc::sourcelist="$apt_sources" -o Dir::Etc::sourceparts=- \
+  install -y python3 python3-venv p7zip-full \
+  texlive-xetex texlive-latex-recommended texlive-latex-extra \
+  texlive-lang-cyrillic fonts-texgyre
+
 python3 -m venv .venv
 .venv/bin/python -m pip install -r src/requirements-papers-to-latex.txt
 ```
 
-Then verify the compiler is available:
+The explicit Debian mirrors are useful in cloud images whose configured APT snapshot host is blocked by the network proxy. APT keeps its normal repository signature and TLS verification enabled. System packages require an environment with permission to install them.
+
+Check the tools:
 
 ```bash
+.venv/bin/python -m pip check
+7z
 xelatex --version
+```
+
+## Convert and compile papers
+
+Each immediate subfolder of `papers/` produces one `.tex` file. DOCX and PDF input use the Python dependencies; legacy DOC input also requires 7-Zip.
+
+```bash
+.venv/bin/python src/papers_to_latex.py papers
+```
+
+Compile the generated LaTeX with XeLaTeX:
+
+```bash
 .venv/bin/python src/papers_to_latex.py papers --compile
 ```
 
-Enable package-manager internet access during Codex Cloud environment setup so the system packages can be downloaded. After Codex tests the setup, review and publish the environment. If you only plan to edit and compile existing `.tex` files in the cloud, the XeLaTeX/TeX Live packages are the essential part; Python and 7-Zip are only needed to regenerate them from the original files.
+The converter writes `.tex` files and, with `--compile`, `.pdf` files into the paper folders. For a book or proceedings folder where automatic title selection is ambiguous, specify a title:
 
-## Converter details
+```bash
+.venv/bin/python src/papers_to_latex.py papers --paper-title "Folder_Name=Article Title"
+```
 
-See [the converter guide](src/README_papers_to_latex.md) for supported formats and reusable command-line options. An empty folder receives a small placeholder `.tex` file so the folder still has a compilable LaTeX document.
+See [the converter guide](src/README_papers_to_latex.md) for supported formats and additional options.

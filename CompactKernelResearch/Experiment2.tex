@@ -5,60 +5,109 @@
 \geometry{margin=22mm}
 \sloppy
 \setlength{\emergencystretch}{3em}
-\graphicspath{{results/}}
 \begin{document}
-\title{Експеримент 2: аналітичні SDF та форма}\author{}\date{27 жовтня 2026}\maketitle
+\title{Експеримент 2: стратегія статті та геометричні еталони}\author{}\date{2026-10-31}\maketitle
 
-\section*{Геометричні еталони}
-Знак від'ємний усередині тіла. Для кола та сфери
-$d(x)=\|x\|-R$, $R=0.55$. Для квадрата з півстороною $a=0.48$:
+\section*{Відповідність опублікованому DOCX}
+Джерело: \path{papers/2025_Pseudo_Gaussian_Modeling/pseudo_gaussian_grid_ric_formatted (2).docx}.
+Формули (2)--(5) задають базисні поліноми; (7), (8), (9) ---
+радіальні функції, суму і колокацію у 2D; (11), (12), (13) --- відповідну
+3D-конструкцію. Метод використовує різні множини центрів $c_j$
+та точок інтерполяції $y_i$:
 \[
- q=|x|-a,\qquad d(x)=\|\max(q,0)\|+\min(\max_i q_i,0).
+ \phi_{n,r}(s)=(1-s^2/r^2)_+^{n+1},\qquad
+ f(x)=\sum_{j=1}^N a_j\phi_{n,r}(\|x-c_j\|),
 \]
-Два неперетинні диски мають центри $(\pm0.4,0)$ і радіус $0.32$;
-точна SDF об'єднання дорівнює мінімуму двох SDF. Ця формула не
-оголошується точною для довільних перекритих тіл.
-Перешийок --- простий багатокутник із шириною центрального мосту
-$0.2$; модуль відстані обчислено мінімумом відстаней до сегментів,
-знак --- тестом належності багатокутнику. Це точна евклідова SDF
-з точністю арифметики, а не наближене CSG-змішування.
-Для тора $R=0.52$, $a=0.20$:
 \[
- d(x,y,z)=\sqrt{(\sqrt{x^2+y^2}-R)^2+z^2}-a.
+ y_i\in\mathop{\rm argmin}_{y:\ d(y)\in\Delta\mathbb Z}\|y-c_i\|,
+ \quad \|y_i-c_i\|<r,\quad 0<\Delta\le h,
+ \qquad A_{ij}=\phi_{n,r}(\|y_i-c_j\|),\quad Aa=d(y).
 \]
-Поворот і зсув реалізовано оберненим жорстким перетворенням запиту.
-Квадрат і перешийок мають кути, тому до них не можна глобально
-застосовувати припущення про гладку поверхню. SDF також недиференційовна
-на відповідних медіальних множинах.
+Центри не рухаються. Зберігаються $N$ коефіцієнтів; після побудови
+точки $y_i$ не потрібні для оцінювання поля.
+Стратегія \texttt{grid} з $y_i=c_i$ є контрольним варіантом зі статті,
+а \texttt{isolines} --- її запропонованим вибором точок на ізолініях.
+Випадкові зсуви не використовуються як заміна авторської стратегії.
 
-\section*{Обчислення та результати}
-$h=0.2$, $r/h=2$, $n=2$, запас $r$, поворот $25^\circ$,
-зсув $0.03$ уздовж $x$. Центри та вузли збігаються.
-Незалежна сітка оцінки: $151^2$ або $35^3$.
-Похибка у смузі означає RMSE за точками $|d-t|<0.2$.
-Компоненти визначаються для множини $f\le t$ зі зв'язністю по осях.
+\section*{Точні SDF}
+Коло/сфера: $d(x)=\|x\|-0.55$. Квадрат з півстороною $a=0.48$:
+\[
+ u=|x|-a,\quad d(x)=\|\max(u,0)\|+\min(\max_j u_j,0).
+\]
+Два неперетинні диски мають центри $(\pm0.4,0)$ та радіус $0.32$;
+мінімум їх SDF є точною SDF цього об'єднання. Перешийок ---
+багатокутник із шириною мосту $0.2$: відстань до сегментів зі знаком
+за належністю до внутрішньої області. Для тора:
+\[
+ d(x,y,z)=\sqrt{(\sqrt{x^2+y^2}-0.52)^2+z^2}-0.20.
+\]
+Жорсткі рухи застосовуються оберненим перетворенням запитів.
+Квадрат і перешийок мають кути; гладкі припущення не виконуються
+також на медіальних множинах. Сфера й тор --- розширення наших
+експериментів; у статті немає їх чисельного тестування.
+
+\section*{Парне порівняння}
+Для кожної форми: $h=0.2$, $r/h=2$, $n=2$, $\Delta=h/2$,
+поворот $25^\circ$, зсув $0.03$, запас $r$.
+В обох стратегіях однакові центри, геометрія, ядро й кількість коефіцієнтів.
+Оцінювання $151^2$ / $35^3$, смуга $|d-t|<0.2$, тут $t=0$.
 \begin{center}\small\resizebox{\linewidth}{!}{\begin{tabular}{llllll}\toprule
-Форма & $N$ & RMSE смуги & Помилка знака & Компоненти d & Компоненти f\\\midrule
-circle & 225 & 0.01073 & 0.006798 & 1 & 1\\
-square & 225 & 0.01397 & 0.009868 & 1 & 1\\
-two\_circles & 225 & 0.01427 & 0.01101 & 2 & 2\\
-neck & 225 & 0.02562 & 0.03346 & 1 & 1\\
-sphere & 3375 & 0.02984 & 0.006577 & 1 & 1\\
-torus & 3375 & 0.0307 & 0.01192 & 1 & 1\\
+Форма & Вузли & RMSE смуги & $H_{sample}$ & Помилка знака & Статус\\\midrule
+circle & grid & 0.01073 & 0.02271 & 0.006798 & ok\\
+circle & isolines & 0.04188 & 0.08901 & 0.02649 & ok\\
+square & grid & 0.01397 & 0.03016 & 0.009868 & ok\\
+square & isolines & 0.09876 & 0.294 & 0.07122 & ok\\
+two\_circles & grid & 0.01427 & 0.04203 & 0.01101 & ok\\
+two\_circles & isolines & 0.197 & 0.6613 & 0.1391 & ok\\
+neck & grid & 0.02562 & 0.09991 & 0.03346 & ok\\
+neck & isolines & 0.06981 & 0.1682 & 0.09118 & ok\\
+sphere & grid & 0.02984 & 0.04444 & 0.006577 & ok\\
+sphere & isolines & 7.619 & 1.15 & 0.4765 & ok\\
+torus & grid & 0.0307 & 0.104 & 0.01192 & ok\\
+torus & isolines & 0.4092 & 0.9694 & 0.17 & ok\\
 \bottomrule\end{tabular}}\end{center}
-Це початкові дискретні вимірювання. Вони характеризують вибрані
-параметри, а не весь метод. Кількість компонент залежить від
-роздільності сітки. Червона лінія --- рівень моделі, чорна --- еталона.
-\begin{center}\includegraphics[width=.9\linewidth]{results/experiment2_circle.pdf}\end{center}
-\begin{center}\includegraphics[width=.9\linewidth]{results/experiment2_square.pdf}\end{center}
-\begin{center}\includegraphics[width=.9\linewidth]{results/experiment2_two_circles.pdf}\end{center}
-\begin{center}\includegraphics[width=.9\linewidth]{results/experiment2_neck.pdf}\end{center}
-\begin{center}\includegraphics[width=.9\linewidth]{results/experiment2_sphere.pdf}\end{center}
-\begin{center}\includegraphics[width=.9\linewidth]{results/experiment2_torus.pdf}\end{center}
 
-Для 3D також побудовано об'ємні ізоповерхні методом marching cubes.
-Цей крок додає дискретизаційну похибку; він не змінює самого поля.
+$H_{sample}$ --- двосторонній максимум відстаней між хмарами вершин
+витягнутих ізоповерхонь, не доведена відстань Гаусдорфа неперервних
+поверхонь. Окремо записано максимальне $|d(x)-t|$ на вершинах
+модельної поверхні. Порожні або вироджені рівні не отримують
+вигаданого значення відстані. Компоненти рахуються на сітці по осях.
+\begin{center}\includegraphics[width=\linewidth]{results/experiment2_circle_comparison.pdf}\end{center}
+\begin{center}\includegraphics[width=\linewidth]{results/experiment2_square_comparison.pdf}\end{center}
+\begin{center}\includegraphics[width=\linewidth]{results/experiment2_two_circles_comparison.pdf}\end{center}
+\begin{center}\includegraphics[width=\linewidth]{results/experiment2_neck_comparison.pdf}\end{center}
 \begin{center}\includegraphics[width=\linewidth]{results/experiment2_sphere_3d.pdf}\end{center}
 \begin{center}\includegraphics[width=\linewidth]{results/experiment2_torus_3d.pdf}\end{center}
 
+\section*{Приклади за схемою рисунків 4--6 і 8}
+Використано $13\times13$ центрів на $[-1.5,1.5]^2$, $h=0.25$;
+порівнюються \texttt{grid}, ізолінії $\Delta=0.25$ та
+$\Delta=0.081384$ (значення з обговорення рисунка 8).
+Стаття не дає однозначного числового набору $r,n$, точного розміру
+квадрата та кута другого прикладу. Для цих дослідів явно прийнято
+$r=0.5$ і $r=1$, $n=4$, півсторону $0.85$, кути $45^\circ$ і $35^\circ$.
+$r=1,n=4$ взято з ілюстрації базису на рисунку 2, але стаття
+не підтверджує використання саме цих параметрів у кожному наступному рисунку.
+Другий радіус збережено для перевірки чутливості.
+Отже, відтворено математичну конструкцію, але це не заява про точне
+відтворення зображень чи авторського оптимуму $0.081384$.
+\begin{center}\small\resizebox{\linewidth}{!}{\begin{tabular}{lllllll}\toprule
+Кут & $r/h$ & Вузли & $\Delta$ & RMSE смуги & $H_{sample}$ & Статус\\\midrule
+45 & 2 & grid & 0.25 & 0.01509 & 0.04098 & ok\\
+45 & 2 & isolines & 0.25 & 0.04469 & 0.1073 & ok\\
+45 & 2 & isolines & 0.08138 & 0.01883 & 0.05319 & ok\\
+35 & 2 & grid & 0.25 & 0.01204 & 0.02758 & ok\\
+35 & 2 & isolines & 0.25 & 0.03154 & 0.1324 & ok\\
+35 & 2 & isolines & 0.08138 & 0.01283 & 0.02913 & ok\\
+45 & 4 & grid & 0.25 & 0.02294 & 0.05546 & ok\\
+45 & 4 & isolines & 0.25 & 0.01804 & 0.02966 & ok\\
+45 & 4 & isolines & 0.08138 & 0.1222 & 0.1531 & ok\\
+35 & 4 & grid & 0.25 & 0.02056 & 0.05689 & ok\\
+35 & 4 & isolines & 0.25 & 0.1338 & 0.2021 & ok\\
+35 & 4 & isolines & 0.08138 & 0.01883 & 0.05151 & ok\\
+\bottomrule\end{tabular}}\end{center}
+\begin{center}\includegraphics[width=\linewidth]{results/paper_45_r05.pdf}\end{center}
+\begin{center}\includegraphics[width=\linewidth]{results/paper_35_r05.pdf}\end{center}
+\begin{center}\includegraphics[width=\linewidth]{results/paper_45_r1.pdf}\end{center}
+\begin{center}\includegraphics[width=\linewidth]{results/paper_35_r1.pdf}\end{center}
 \end{document}

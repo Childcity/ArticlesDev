@@ -8,7 +8,11 @@ import experiment3 as e3
 st.set_page_config(page_title='Pseudo-Gaussian interpolation',layout='wide')
 st.title('Псевдогаусова інтерполяція зі статті')
 st.caption('Центри ядер фіксовані; авторська стратегія вибирає найближчі точки рівнів SDF=qΔ.')
-page=st.sidebar.radio('Експеримент',['1. Ядро та стійкість','2. Геометрія та офсети','3. Параметри'])
+page=st.sidebar.radio('Експеримент',['1. Ядро та стійкість','2. Геометрія та офсети','3. Параметри','4. Незалежна перевірка','5. Градієнти та топологія','6. Парето та ресурси'])
+if page.startswith(('4.','5.','6.')):
+    from extended_app import show
+    show(page)
+    st.stop()
 def request_calculation():
     st.session_state['calculation_requested']=True
 

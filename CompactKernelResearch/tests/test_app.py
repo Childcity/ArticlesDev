@@ -59,3 +59,14 @@ def test_slider_change_calculates_without_button():
     app.run()
     assert not app.exception
     assert len(app.json)==0
+
+
+def test_extended_results_pages_and_quality_recalculation():
+    app=AppTest.from_file(str(Path(__file__).parents[1]/'app.py'),default_timeout=60).run()
+    for page in ['4. Незалежна перевірка','5. Градієнти та топологія','6. Парето та ресурси']:
+        app.radio[0].set_value(page).run()
+        assert not app.exception
+    app.radio[0].set_value('5. Градієнти та топологія').run()
+    next(b for b in app.button if b.label=='Перевірити градієнти й топологію').click().run()
+    assert not app.exception
+    assert len(app.json)==1

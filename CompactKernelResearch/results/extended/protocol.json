@@ -1,0 +1,288 @@
+{
+  "version": "extended-4-6-v1",
+  "date": "2026-11-01",
+  "train": [
+    {
+      "shape": "circle",
+      "angle": 11.0,
+      "shift": -0.03
+    },
+    {
+      "shape": "square",
+      "angle": 23.0,
+      "shift": 0.02
+    }
+  ],
+  "holdout": [
+    "capsule",
+    "rounded_box",
+    "neck",
+    "two_circles",
+    "sphere",
+    "torus"
+  ],
+  "train_seeds": [
+    0,
+    1,
+    2
+  ],
+  "holdout_seeds": [
+    10,
+    11,
+    12
+  ],
+  "max_candidates": 6,
+  "candidates": {
+    "pg_grid": [
+      {
+        "rho": 1.5,
+        "order": 2,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 1.5,
+        "order": 4,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 2.0,
+        "order": 2,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 2.0,
+        "order": 4,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 3.0,
+        "order": 2,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 3.0,
+        "order": 4,
+        "delta_ratio": 0.5
+      }
+    ],
+    "pg_isolines": [
+      {
+        "rho": 1.5,
+        "order": 2,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 1.5,
+        "order": 4,
+        "delta_ratio": 1.0
+      },
+      {
+        "rho": 2.0,
+        "order": 2,
+        "delta_ratio": 0.25
+      },
+      {
+        "rho": 2.0,
+        "order": 4,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 3.0,
+        "order": 2,
+        "delta_ratio": 1.0
+      },
+      {
+        "rho": 3.0,
+        "order": 4,
+        "delta_ratio": 0.25
+      }
+    ],
+    "wendland_c2_grid": [
+      {
+        "rho": 1.25,
+        "order": 4,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 1.5,
+        "order": 4,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 2.0,
+        "order": 4,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 2.5,
+        "order": 4,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 3.0,
+        "order": 4,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 4.0,
+        "order": 4,
+        "delta_ratio": 0.5
+      }
+    ],
+    "wendland_c2_isolines": [
+      {
+        "rho": 1.5,
+        "order": 4,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 1.5,
+        "order": 4,
+        "delta_ratio": 1.0
+      },
+      {
+        "rho": 2.0,
+        "order": 4,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 2.0,
+        "order": 4,
+        "delta_ratio": 1.0
+      },
+      {
+        "rho": 3.0,
+        "order": 4,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 3.0,
+        "order": 4,
+        "delta_ratio": 1.0
+      }
+    ],
+    "wendland_c4_grid": [
+      {
+        "rho": 1.25,
+        "order": 4,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 1.5,
+        "order": 4,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 2.0,
+        "order": 4,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 2.5,
+        "order": 4,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 3.0,
+        "order": 4,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 4.0,
+        "order": 4,
+        "delta_ratio": 0.5
+      }
+    ],
+    "wendland_c4_isolines": [
+      {
+        "rho": 1.5,
+        "order": 4,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 1.5,
+        "order": 4,
+        "delta_ratio": 1.0
+      },
+      {
+        "rho": 2.0,
+        "order": 4,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 2.0,
+        "order": 4,
+        "delta_ratio": 1.0
+      },
+      {
+        "rho": 3.0,
+        "order": 4,
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 3.0,
+        "order": 4,
+        "delta_ratio": 1.0
+      }
+    ],
+    "linear": [
+      {
+        "rho": 2.0,
+        "order": 4,
+        "delta_ratio": 0.5
+      }
+    ],
+    "cubic": [
+      {
+        "rho": 2.0,
+        "order": 4,
+        "delta_ratio": 0.5
+      }
+    ],
+    "cubic_redistance": [
+      {
+        "rho": 2.0,
+        "order": 4,
+        "delta_ratio": 0.5
+      }
+    ]
+  },
+  "holdout_offsets": [
+    -0.1,
+    0.0,
+    0.1
+  ],
+  "failure_threshold_H": 0.1,
+  "topology": "foreground 4/6 and background 8/26; boundary clipping flagged",
+  "source_hashes": {
+    "app.py": "4faf3c47bc1e6df64672f2a7345b041d90ffe591aff7f96ad9ced00e5c833544",
+    "core.py": "c8f32a2eb6a3c8e1ec48b610e5af4044b2025a7bfda8c8f14cef9c86dc445c28",
+    "experiment1.py": "4c011677802e9b50b2c20e87d8dec0c4c641f9358026aae21700a8139cd60a44",
+    "experiment2.py": "cb411961a5e89dabae3db7038d5ae502402fd2558ab9e303acee6053496e3930",
+    "experiment3.py": "1d4357c71889c2a8c01a292a4bf91aaf15eaeff2117812db39bceee26e50eee4",
+    "generate.py": "156dc121354ca848ce921e261a3f2b0366023ba3632b1f91dabffcae88a20aaa",
+    "reports.py": "7815bc7db24ff4651e8358e74c342f464673df9873545cebc9051da0008ca77c",
+    "storage.py": "e64cf0a273a5abe10d209d157a6f489b1f281995b92b5d6dbd245911aa0383e6",
+    "extended_app.py": "c161811a2230695ceff627e56b17323127f3afb9e2c74395d9ffa219688bf106",
+    "quality.py": "f917015d04d5491007d83a014048232633bc3bc17bdd590244e6cf6fdaed679c",
+    "comparators.py": "1e09ed23e150a51ee79bf335dc670888b7f6ed5e8d97231839b92fc1be0da13c",
+    "experiment6.py": "baf0f991988607d072209b2dd5cde626cd5d23ea0283cef9a3b932f599ddf96f",
+    "experiment5.py": "96e7d684c46858fc1e1f2cb844b30a9c1b07c670e89a063ff6dcb590afbbf55f",
+    "editing.py": "78c0393c962d8a96b88b2943e25680e482208c004c8bee32afab04e9e408ed79",
+    "geometry.py": "70e8c3ac2e37ae2e2606f8a9acfd294b41d1e0b56329a9ca57f54e8aba52f87f",
+    "experiment4.py": "e397c9a5ad5f2015fb7e350a434c9a0f5cb04c1533cd606a3d2a86d2860b2a4b",
+    "extended_reports.py": "f32213af78ec068712d28fc222e747360676c483e18f96e5db46beba59030ab1",
+    "resource_worker.py": "397698e6aff6514877317bb7dae2897760fe53c398054d75f0c9f28911df388a",
+    "run_extended.py": "15432290edc11aa02e00e4aee2c13fa4daa664d98dfc16d8bf8677824cad59bd"
+  },
+  "environment": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "packages": {
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "matplotlib": "3.11.2",
+      "scikit-image": "0.26.0"
+    }
+  }
+}

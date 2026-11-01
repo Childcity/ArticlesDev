@@ -125,6 +125,10 @@ class Geometry:
         if self.shape=='two_circles':
             return np.minimum(np.linalg.norm(p-[-.4,0],axis=1),np.linalg.norm(p-[.4,0],axis=1))-.32
         if self.shape=='neck':return polygon_sdf(p)
+        if self.shape=='capsule':
+            closest=np.column_stack([np.clip(p[:,0],-.38,.38),np.zeros(len(p))])
+            return np.linalg.norm(p-closest,axis=1)-.22
+        if self.shape=='rounded_box':return Geometry('square',square_half=.35)(p)-.12
         if self.shape=='torus':return np.hypot(np.linalg.norm(p[:,:2],axis=1)-.52,p[:,2])-.20
         raise ValueError(self.shape)
 
@@ -167,6 +171,15 @@ class Geometry:
                     take=(np.abs(dfield-level)<1e-8)&(d<best)
                     out[take]=candidate[take];best[take]=d[take]
         elif self.shape=='neck':out=polygon_project(p,POLYGON,level)
+        elif self.shape=='capsule':
+            radius=.22+level
+            if radius>=-1e-12:
+                closest=np.column_stack([np.clip(p[:,0],-.38,.38),np.zeros(len(p))])
+                delta=p-closest;normal=unit(delta)
+                normal[np.linalg.norm(delta,axis=1)<1e-14]=[0,1]
+                out=closest+max(0,radius)*normal
+        elif self.shape=='rounded_box':
+            out=Geometry('square',square_half=.35).project_level(p,level+.12)
         elif self.shape=='torus':
             radius=.20+level
             if radius>=-1e-12:

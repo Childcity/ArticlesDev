@@ -59,3 +59,16 @@ The converter writes `.tex` files and, with `--compile`, `.pdf` files into the p
 ```
 
 See [the converter guide](src/README_papers_to_latex.md) for supported formats and additional options.
+
+## Compact kernel research
+
+The numerical study is in [CompactKernelResearch/README.md](CompactKernelResearch/README.md). It includes the article's isoline node selection, experiments 1–6, tests, an interactive Streamlit app, raw measurements, and Ukrainian TeX/PDF reports.
+
+Points 4–6 add frozen parameter selection with held-out geometries, offset/gradient/topology checks at three resolutions, Wendland and grid baselines, native memory measurements, cached editing, and Pareto comparisons. See [ExtendedResearch.md](CompactKernelResearch/ExtendedResearch.md) and [NextStep.tex](CompactKernelResearch/NextStep.tex) for findings and limitations.
+
+```bash
+.venv/bin/python -m pip install -r CompactKernelResearch/requirements.txt
+cd CompactKernelResearch
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 ../.venv/bin/python run_extended.py
+../.venv/bin/python -m streamlit run app.py
+```

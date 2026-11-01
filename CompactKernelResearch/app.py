@@ -33,14 +33,14 @@ if submitted or calculation_requested:
         try:
             if page.startswith('1'):
                 result=e1.run(h=h,rho=rho,order=order,margin=margin,strategy=strategy,level_step=ratio*h)
-                st.json(result[0]);fig=e1.figure(result)
+                st.json(result[0],expanded=False);fig=e1.figure(result)
                 st.pyplot(fig);plt.close(fig)
             else:
                 res=min(resolution,51) if shape in ('sphere','torus') else resolution
                 params=dict(shape=shape,h=h,rho=rho,order=order,angle=angle,shift=shift,
                             offset=offset,resolution=res,level_step=ratio*h,margin=margin)
                 result=e2.run(**params,strategy=strategy)
-                st.json(result[0]);fig=e2.figure(result);st.pyplot(fig);plt.close(fig)
+                st.json(result[0],expanded=False);fig=e2.figure(result);st.pyplot(fig);plt.close(fig)
                 # Контрольна стратегія має ту саму геометрію, центри й ядро.
                 other=e2.run(**params,strategy='grid' if strategy=='isolines' else 'isolines')
                 st.subheader('Порівняння за однакових умов')
@@ -71,7 +71,7 @@ if page.startswith('3'):
     if st.button('Добрати крок ізоліній: приклад за схемою рисунка 8'):
         with st.spinner('Калібрування кроку та незалежна перевірка…'):
             summary,trials,results=e3.optimize_level_step()
-            st.json(summary);st.dataframe(trials)
+            st.json(summary,expanded=False);st.dataframe(trials)
             fig=e3.optimization_figure(summary,trials);st.pyplot(fig);plt.close(fig)
             fig=e2.comparison_figure(results);st.pyplot(fig);plt.close(fig)
             from storage import from_model

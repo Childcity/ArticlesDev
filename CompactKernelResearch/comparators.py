@@ -15,6 +15,7 @@ from geometry import Geometry
 
 METHODS=('pg_grid','pg_isolines','wendland_c2_grid','wendland_c2_isolines',
          'wendland_c4_grid','wendland_c4_isolines','linear','cubic','cubic_redistance')
+PG_ORDER=4
 
 
 class CountedGeometry(Geometry):
@@ -30,7 +31,7 @@ class CountedGeometry(Geometry):
         return super().project_level(p,t)
 
 
-def basis(q,family,order=4):
+def basis(q,family,order=PG_ORDER):
     q=np.asarray(q);u=np.maximum(1-q,0)
     if family=='pg':return np.maximum(1-q*q,0)**(order+1)
     if family=='wendland_c2':return u**4*(4*q+1)
@@ -38,7 +39,7 @@ def basis(q,family,order=4):
     raise ValueError(family)
 
 
-def basis_derivative(q,family,order=4):
+def basis_derivative(q,family,order=PG_ORDER):
     q=np.asarray(q);u=np.maximum(1-q,0)
     if family=='pg':return -2*(order+1)*q*np.maximum(1-q*q,0)**order
     if family=='wendland_c2':return -20*q*u**3
@@ -95,7 +96,7 @@ class GridField:
     def stored_bytes(self):return self.payload_bytes
 
 
-def build(method,geometry,h=.25,rho=2.,order=4,delta_ratio=.5,extent=1.,margin=None,diagnostics=False):
+def build(method,geometry,h=.25,rho=2.,order=PG_ORDER,delta_ratio=.5,extent=1.,margin=None,diagnostics=False):
     if method not in METHODS:raise ValueError(method)
     start=time.perf_counter();dim=3 if geometry.shape in ('sphere','torus') else 2
     # Однаковий запас усіх методів у парній задачі; незалежний від обраного rho.
@@ -145,11 +146,14 @@ def build(method,geometry,h=.25,rho=2.,order=4,delta_ratio=.5,extent=1.,margin=N
 
 
 def candidates(method):
-    """До шести кандидатів на метод; скінченний зафіксований бюджет, не повний оптимум."""
-    if method in ('linear','cubic','cubic_redistance'):return [dict(rho=2.,order=4,delta_ratio=.5)]
-    if method=='pg_grid':return [dict(rho=r,order=n,delta_ratio=.5) for r in (1.5,2.,3.) for n in (2,4)]
-    if method=='pg_isolines':
-        return [dict(rho=r,order=n,delta_ratio=d) for r,n,d in
-                [(1.5,2,.5),(1.5,4,1.),(2.,2,.25),(2.,4,.5),(3.,2,1.),(3.,4,.25)]]
-    if method.endswith('_grid'):return [dict(rho=r,order=4,delta_ratio=.5) for r in (1.25,1.5,2.,2.5,3.,4.)]
-    return [dict(rho=r,order=4,delta_ratio=d) for r in (1.5,2.,3.) for d in (.5,1.)]
+    """До шести різних кандидатів; для PG гладкість фіксована n=4.
+
+    Grid-методи добирають радіус; isolines — радіус та крок рівнів.
+    Однакові сітки кандидатів полегшують порівняння компактних ядер.
+    """
+    if method not in METHODS:raise ValueError(method)
+    if method in ('linear','cubic','cubic_redistance'):
+        return [dict(rho=2.,order=PG_ORDER,delta_ratio=.5)]
+    if method.endswith('_grid'):
+        return [dict(rho=r,order=PG_ORDER,delta_ratio=.5) for r in (1.25,1.5,2.,2.5,3.,4.)]
+    return [dict(rho=r,order=PG_ORDER,delta_ratio=d) for r in (1.5,2.,3.) for d in (.5,1.)]

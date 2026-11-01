@@ -144,3 +144,69 @@ def test_isolated_worker_reports_native_memory_and_editing():
     assert len(row['cached_update_samples'])==3
     assert len(row['full_rebuild_samples'])==3
     assert row['total_edit_seconds']['10']>row['cached_update_seconds']
+
+
+def test_pg_default_matches_quartic_smoothness_kernel():
+    from comparators import PG_ORDER
+    assert PG_ORDER==4
+    q=np.array([0.,.2,.5,.9,1.])
+    assert np.allclose(basis(q,'pg'),np.maximum(1-q*q,0)**5)
+    assert np.allclose(basis_derivative(q,'pg'),-10*q*np.maximum(1-q*q,0)**4)
+    field,stats=build('pg_grid',CountedGeometry('circle'),h=.3)
+    assert field.order==stats['order']==PG_ORDER
+
+
+def test_fixed_smoothness_tuning_budget_has_distinct_candidates():
+    from comparators import candidates,PG_ORDER
+    for method in METHODS:
+        configs=candidates(method)
+        assert len(configs)==(1 if method in ('linear','cubic','cubic_redistance') else 6)
+        assert all(c['order']==PG_ORDER for c in configs)
+        assert len({tuple(sorted(c.items())) for c in configs})==len(configs)
+    assert candidates('pg_grid')==candidates('wendland_c2_grid')==candidates('wendland_c4_grid')
+    assert candidates('pg_isolines')==candidates('wendland_c2_isolines')==candidates('wendland_c4_isolines')
+
+
+def test_failure_design_covers_fixed_smoothness_cartesian_product():
+    from experiment6 import failure_configurations
+    configs=list(failure_configurations())
+    assert len(configs)==40
+    assert {c['order'] for c in configs}=={4}
+    assert {c['h'] for c in configs}=={.2,.3}
+    assert {c['rho'] for c in configs}=={.5,1.,1.5,2.,3.}
+    assert len({tuple(sorted(c.items())) for c in configs})==40
+
+
+def test_report_guard_requires_consistent_pg_smoothness():
+    from comparators import PG_ORDER
+    from extended_reports import validate_pg_order
+    protocol=dict(pg_order=PG_ORDER)
+    selection=dict(pg_grid=dict(config=dict(order=PG_ORDER)))
+    tables=dict(training=[dict(method='pg_grid',order=PG_ORDER)],
+                resources=[dict(method='pg_grid',config=dict(order=PG_ORDER))])
+    validate_pg_order(protocol,selection,tables)
+    tables['resources'][0]['config']['order']=PG_ORDER+1
+    with pytest.raises(ValueError,match='order'):
+        validate_pg_order(protocol,selection,tables)
+
+
+def test_published_extended_protocol_and_measurements_use_order_four():
+    import json
+    from pathlib import Path
+    from comparators import PG_ORDER
+    from extended_reports import validate_pg_order
+    out=Path(__file__).parents[1]/'results'/'extended'
+    protocol=json.loads((out/'protocol.json').read_text())
+    selected=json.loads((out/'selection.json').read_text())
+    tables={name:json.loads((out/(name+'.json')).read_text())
+            for name in ('training','holdout','resolution','failure_map','resources')}
+    assert protocol['pg_order']==PG_ORDER==4
+    assert protocol['version']=='extended-4-6-n4-v1'
+    for configs in protocol['candidates'].values():
+        assert all(config['order']==PG_ORDER for config in configs)
+    validate_pg_order(protocol,selected,tables)
+    assert len(tables['failure_map'])==len(protocol['failure_configurations'])==40
+    assert {tuple(row[k] for k in ('h','rho','order','strategy','delta_ratio'))
+            for row in tables['failure_map']}=={
+                tuple(config[k] for k in ('h','rho','order','strategy','delta_ratio'))
+                for config in protocol['failure_configurations']}

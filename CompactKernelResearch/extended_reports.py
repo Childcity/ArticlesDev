@@ -4,9 +4,23 @@ from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 from reports import write,table,image
+from comparators import PG_ORDER
 
 
 def read(out,name):return json.loads((out/(name+'.json')).read_text())
+
+
+def validate_pg_order(protocol,selection,tables):
+    """Єдина гладкість протоколу в доборі, перевірці та ресурсних задачах."""
+    if protocol.get('pg_order')!=PG_ORDER:raise ValueError('Expected PG order 4 protocol')
+    for method,chosen in selection.items():
+        if method.startswith('pg_') and chosen.get('config',{}).get('order')!=PG_ORDER:
+            raise ValueError('PG selection must use order 4')
+    for name,rows in tables.items():
+        for row in rows:
+            if name=='failure_map' or row.get('method','').startswith('pg_'):
+                if row.get('config',row).get('order')!=PG_ORDER:
+                    raise ValueError(f'PG order must be 4 in {name}')
 
 
 def aggregate(rows,keys,group='method'):
@@ -37,7 +51,7 @@ def figures(out,holdout,resolution,failures,resources):
         rows=aggregate([r for r in holdout if r['dim']==dim],['band_rmse'])
         ax.bar(range(len(rows)),[r['band_rmse'] or np.nan for r in rows])
         ax.set_xticks(range(len(rows)),[r['method'] for r in rows],rotation=65,ha='right',fontsize=8)
-        ax.set(title=f'{dim}D held-out geometries',ylabel='Median band RMSE',yscale='log')
+        ax.set(title=f'{dim}D held-out geometries (PG n=4)',ylabel='Median band RMSE',yscale='log')
     save(fig,'holdout')
     fig,axes=plt.subplots(1,2,figsize=(12,4),layout='constrained')
     for ax,shape in zip(axes,('rounded_box','torus')):
@@ -55,14 +69,20 @@ def figures(out,holdout,resolution,failures,resources):
     ax.set(xlabel='Extraction resolution',ylabel='Digital beta1',title='Thin torus: t=-0.19');ax.legend(fontsize=7,ncol=2)
     save(fig,'torus_topology')
     colors={'within_threshold':0,'quality_threshold':1,'uncovered_support':2,'rank_deficient':3,'algebraic_failure':4}
-    fig,axes=plt.subplots(1,2,figsize=(10,3.5),layout='constrained')
-    for ax,strategy in zip(axes,('grid','isolines')):
-        data=[r for r in failures if r['h']==.2 and r['delta_ratio']==.5 and r['strategy']==strategy]
-        values=np.array([[colors[next(r for r in data if r['rho']==rho and r['order']==n)['flag']] for rho in (.5,1,1.5,2,3)] for n in (1,2,4)])
-        im=ax.imshow(values,vmin=0,vmax=4,cmap='viridis',aspect='auto')
-        ax.set_xticks(range(5),['.5','1','1.5','2','3']);ax.set_yticks(range(3),['1','2','4'])
-        ax.set(xlabel='rho',ylabel='Order n',title=strategy)
-    fig.colorbar(im,ax=axes.tolist(),ticks=range(5),label='0 within; 1 quality; 2 coverage; 3 rank; 4 solve')
+    hs=sorted({r['h'] for r in failures})
+    rhos=sorted({r['rho'] for r in failures})
+    ratios=sorted({r['delta_ratio'] for r in failures})
+    fig,axes=plt.subplots(len(hs),2,figsize=(11,2.8*len(hs)),layout='constrained',squeeze=False)
+    for line,h in enumerate(hs):
+        for ax,strategy in zip(axes[line],('grid','isolines')):
+            data=[r for r in failures if r['h']==h and r['strategy']==strategy]
+            values=np.array([[colors[next(r for r in data if r['rho']==rho and r['delta_ratio']==ratio)['flag']]
+                              for rho in rhos] for ratio in ratios])
+            im=ax.imshow(values,vmin=0,vmax=4,cmap='viridis',aspect='auto')
+            ax.set_xticks(range(len(rhos)),[f'{r:g}' for r in rhos])
+            ax.set_yticks(range(len(ratios)),[f'{r:g}' for r in ratios])
+            ax.set(xlabel='rho',ylabel='Isoline spacing Δ/h',title=f'{strategy}, h={h:g}, n=4')
+    fig.colorbar(im,ax=axes.ravel().tolist(),ticks=range(5),label='0 within; 1 quality; 2 coverage; 3 rank; 4 solve')
     save(fig,'failure_map')
     fig,axes=plt.subplots(1,2,figsize=(12,5),layout='constrained')
     for ax,dim in zip(axes,(2,3)):
@@ -81,6 +101,8 @@ def figures(out,holdout,resolution,failures,resources):
 def publish(out):
     protocol=read(out,'protocol');selection=read(out,'selection');training=read(out,'training')
     holdout=read(out,'holdout');resolution=read(out,'resolution');failures=read(out,'failure_map');resources=read(out,'resources')
+    validate_pg_order(protocol,selection,dict(training=training,holdout=holdout,resolution=resolution,
+                                            failure_map=failures,resources=resources))
     date=protocol['date'];figures(out,holdout,resolution,failures,resources)
     chosen=[dict(method=m,**r.get('config',{}),**{k:v for k,v in r.items() if k!='config'}) for m,r in selection.items()]
     for row in chosen:
@@ -90,7 +112,7 @@ def publish(out):
     for shape in sorted({r['shape'] for r in holdout}):
         per_shape.extend(dict(r,shape=shape) for r in aggregate([x for x in holdout if x['shape']==shape],['band_rmse','sampled_offset_hausdorff','gradient_rmse']))
     (out/'by_shape.json').write_text(json.dumps(per_shape,indent=2,allow_nan=False))
-    summary=dict(protocol=protocol['version'],selection=selection,holdout_2d=dims[2],holdout_3d=dims[3],
+    summary=dict(protocol=protocol['version'],pg_order=PG_ORDER,selection=selection,holdout_2d=dims[2],holdout_3d=dims[3],
                  failure_counts={k:sum(r['flag']==k for r in failures) for k in sorted({r['flag'] for r in failures})},
                  resource_failures=[r for r in resources if r['status']!='ok'])
     (out/'summary.json').write_text(json.dumps(summary,indent=2,ensure_ascii=False,allow_nan=False))
@@ -98,6 +120,11 @@ def publish(out):
 \section*{Протокол, зафіксований до оцінювання}
 Навчальні форми: коло й квадрат; seeds $0,1,2$, Sobol по 512 точок,
 $h=0.25$. Критерій --- RMSE у смузі $|d|<0.25$.
+Псевдогаусове ядро має фіксовану гладкість $n=4$:
+\[
+ \phi_{4,r}(s)=(1-s^2/r^2)_+^5.
+\]
+Добираються лише радіус підтримки та, для isolines, крок рівнів.
 Кожен параметризований метод має не більше шести наперед заданих
 кандидатів; linear/cubic/EDT мають один варіант без параметрів.
 Грубий набір не гарантує оптимальності жодного методу.
@@ -121,6 +148,8 @@ Seeds $10,11,12$ задають нові кути й зсуви.
 \]
 Це сімейства Вендланда для розмірностей 2/3; параметр $n$
 у таблиці добору стосується лише псевдогаусового ядра.
+Для grid перебирається $\rho=1.25,1.5,2,2.5,3,4$;
+для isolines --- добуток $\rho=1.5,2,3$ та $\Delta/h=0.5,1$.
 Для Wendland наводяться окремо grid/isolines: додатна визначеність
 при спільних вузлах не переноситься автоматично на зміщені вузли.
 Cubic --- SciPy RegularGridInterpolator not-a-knot з прямим
@@ -144,6 +173,8 @@ Seed min/max --- діапазон медіан трьох окремих seeds, 
 ''' +table(dims[2],[('method','2D метод'),('band_rmse','RMSE смуги'),('band_rmse_seed_min','Seed min'),('band_rmse_seed_max','Seed max'),('gradient_rmse','RMSE градієнта'),('sampled_offset_hausdorff',r'$H_{sample}$'),('failures','Відмови')])+table(dims[3],[('method','3D метод'),('band_rmse','RMSE смуги'),('band_rmse_seed_min','Seed min'),('band_rmse_seed_max','Seed max'),('gradient_rmse','RMSE градієнта'),('sampled_offset_hausdorff',r'$H_{sample}$'),('failures','Відмови')])+image('extended/holdout'),date)
     write('Experiment5.tex','Експеримент 5: офсети, градієнти й топологія',r'''
 \section*{Диференціальні метрики}
+Псевдогаусове поле в цій серії використовує $n=4$ та
+$\phi(q)=(1-q^2)_+^5$; гладкість не входить до добору.
 Для компактної суми похідна обчислюється аналітично:
 \[
  \nabla f(x)=\sum_j a_j\phi'(\|x-c_j\|/r)
@@ -182,9 +213,10 @@ $H_{sample}$ --- відстань між хмарами вершин дискр�
     resource_rows=[dict(r,peak_MB=r.get('peak_rss_bytes',0)/2**20,payload_KiB=r.get('stored_bytes',0)/1024) for r in resources if r['status']=='ok']
     write('Experiment6.tex','Експеримент 6: відмови, ресурси та Парето',r'''
 \section*{Повний добуток параметрів}
+Для псевдогаусового методу фіксовано $n=4$.
 Для повернутого квадрата перебрано $h=0.2,0.3$,
-$\rho=0.5,1,1.5,2,3$, $n=1,2,4$, grid/isolines,
-$\Delta/h=0.5,1$. Це 120 конфігурацій; повтори grid за
+$\rho=0.5,1,1.5,2,3$, grid/isolines,
+$\Delta/h=0.5,1$. Це 40 конфігурацій; повтори grid за
 $\Delta$ залишено явно. Геометрична перевірка --- сітка $101^2$.
 Ранг і SVD обчислюються до 600 центрів; поза цією межею не вигадуються.
 Покриття --- незалежні 1024 Sobol-точки. Наперед заданий прапорець
@@ -233,13 +265,19 @@ L/U/перестановок, а фактична пам'ять редагува
 def nextstep(out,protocol,summary,resolution,resources):
     best2=min([r for r in summary['holdout_2d'] if r['band_rmse'] is not None],key=lambda r:r['band_rmse'])
     best3=min([r for r in summary['holdout_3d'] if r['band_rmse'] is not None],key=lambda r:r['band_rmse'])
+    pg={dim:{r['method']:r for r in summary[f'holdout_{dim}d']} for dim in (2,3)}
+    pg_text=('Для псевдогаусового ядра RMSE grid/isolines становить '
+             f"{pg[2]['pg_grid']['band_rmse']:.4g}/{pg[2]['pg_isolines']['band_rmse']:.4g} у 2D та "
+             f"{pg[3]['pg_grid']['band_rmse']:.4g}/{pg[3]['pg_isolines']['band_rmse']:.4g} у 3D.\n")
     body=r'''Пункти 4--6 виконано як відтворювану скінченну серію.
+Псевдогаусове ядро має стандартну гладкість $n=4$;
+добираються радіус і крок ізоліній.
 Параметри вибрано на колі/квадраті й заморожено перед перевіркою
 на шести інших формах і нових seeds. Порівняно дев'ять методів:
 псевдогаусова сума та Wendland C²/C⁴ з двома стратегіями вузлів,
 linear, cubic і окрема дискретна cubic+EDT baseline.
 
-'''+f"Найменшу медіанну RMSE смуги в цій серії дав {best2['method'].replace('_',r'\_')} у 2D " +f"({best2['band_rmse']:.4g}) та {best3['method'].replace('_',r'\_')} у 3D ({best3['band_rmse']:.4g}). "+r'''
+'''+pg_text+f"Найменшу медіанну RMSE смуги в цій серії дав {best2['method'].replace('_',r'\_')} у 2D " +f"({best2['band_rmse']:.4g}) та {best3['method'].replace('_',r'\_')} у 3D ({best3['band_rmse']:.4g}). "+r'''
 Це опис перевірених бюджетів і геометрій, а не універсальний переможець.
 Повні відмови й похибки збережено.
 
@@ -249,8 +287,8 @@ linear, cubic і окрема дискретна cubic+EDT baseline.
 еталон також може бути недорозділеним; такі числа не є доказом
 неправильної топології неперервного поля.
 
-Побудовано повну карту взаємодій h, радіуса, порядку й стратегії
-вузлів. Виміряно побудову, проєкцію, розв'язання, серії запитів
+Побудовано карту взаємодій h, радіуса, кроку рівнів і стратегії
+вузлів при $n=4$. Виміряно побудову, проєкцію, розв'язання, серії запитів
 та нативний peak RSS у незалежних процесах. Окремо виміряно
 редагування з кешем і повною перебудовою; фіксовані вузли isolines
 при редагуванні не підміняються новим адаптивним вибором. Криві Парето враховують
@@ -270,6 +308,7 @@ Experiment6.tex; raw data, протокол і версії --- results/extended
 
 def markdown(out,protocol,summary,resolution,resources):
     lines=['# Дослідження пунктів 4–6',f"\nДата: {protocol['date']}. Протокол: `{protocol['version']}`.",
+           '\nПсевдогаусове ядро має стандартну гладкість **n=4**: `φ(q)=(1−q²)_+⁵`. Добираються радіус підтримки та крок ізоліній; гладкість фіксована.',
            '\n## Незалежна перевірка','\nПараметри заморожено після кола/квадрата, до оцінювання шести інших геометрій. Медіани нижче — описові; офсети та h повторюються для тих самих форм.',
            '\n| Метод | 2D RMSE смуги | 3D RMSE смуги |','|---|---:|---:|']
     a={r['method']:r for r in summary['holdout_2d']};b={r['method']:r for r in summary['holdout_3d']}

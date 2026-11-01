@@ -3,16 +3,22 @@ import os,json,subprocess,sys
 from pathlib import Path
 from itertools import product
 import numpy as np
-from comparators import CountedGeometry,build,collocation
+from comparators import CountedGeometry,build,collocation,PG_ORDER
 from quality import probes,measure,pareto_mask
+
+
+def failure_configurations():
+    """Повний добуток h, радіуса, стратегії та кроку рівнів при n=4."""
+    for h,rho,strategy,ratio in product((.2,.3),(.5,1.,1.5,2.,3.),('grid','isolines'),(.5,1.)):
+        yield dict(h=h,rho=rho,order=PG_ORDER,strategy=strategy,delta_ratio=ratio)
 
 
 def failure_map():
     rows=[]
-    # Повний добуток взаємодій, на відміну від однофакторної серії пункту 3.
-    for h,rho,order,strategy,ratio in product((.2,.3),(.5,1.,1.5,2.,3.),(1,2,4),('grid','isolines'),(.5,1.)):
+    for config in failure_configurations():
+        h,rho,order,strategy,ratio=(config[k] for k in ('h','rho','order','strategy','delta_ratio'))
         geometry=CountedGeometry('square',angle=33.,shift=.037)
-        row=dict(h=h,rho=rho,order=order,strategy=strategy,delta_ratio=ratio)
+        row=config.copy()
         try:
             model,info=build('pg_'+strategy,geometry,h=h,rho=rho,order=order,delta_ratio=ratio,
                              margin=3*h,diagnostics=True)

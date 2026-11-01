@@ -9,7 +9,7 @@ matplotlib.use('Agg')
 import experiment4 as e4
 import experiment5 as e5
 import experiment6 as e6
-from comparators import METHODS,candidates
+from comparators import METHODS,candidates,PG_ORDER
 
 ROOT=Path(__file__).parent;OUT=ROOT/'results'/'extended'
 
@@ -27,7 +27,8 @@ def save(name,data):
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--resume',action='store_true');args=parser.parse_args()
-    protocol=dict(version='extended-4-6-v1',date=datetime.now(ZoneInfo('Europe/Kyiv')).date().isoformat(),
+    protocol=dict(version='extended-4-6-n4-v1',date=datetime.now(ZoneInfo('Europe/Kyiv')).date().isoformat(),
+        pg_order=PG_ORDER,failure_configurations=list(e6.failure_configurations()),
         train=e4.TRAIN,holdout=e4.HOLDOUT,train_seeds=[0,1,2],holdout_seeds=[10,11,12],
         max_candidates=6,candidates={m:candidates(m) for m in METHODS},
         holdout_offsets=[-.1,0.,.1],failure_threshold_H=.1,
@@ -38,8 +39,8 @@ def main():
     protocol_path=OUT/'protocol.json'
     if args.resume and protocol_path.exists():
         old=json.loads(protocol_path.read_text())
-        if old['source_hashes']!=protocol['source_hashes']:
-            raise ValueError('Sources changed; rerun without --resume to avoid mixing protocols')
+        if any(old.get(key)!=protocol[key] for key in ('version','pg_order','source_hashes')):
+            raise ValueError('Protocol does not match; run without --resume')
     save('protocol',protocol)
     if args.resume and (OUT/'selection.json').exists():selection=json.loads((OUT/'selection.json').read_text())
     else:

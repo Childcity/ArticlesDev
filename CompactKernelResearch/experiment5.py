@@ -6,7 +6,7 @@ from quality import measure,gradient_quality
 
 def run(selection):
     rows=[]
-    # Різна гладкість і критичні зміни, включно з отвором тора.
+    # Форми з різною регулярністю та критичні офсети, включно з отвором тора.
     scenarios=[('rounded_box',(-.1,0.,.1)),('two_circles',(.06,.08,.10)),
                ('neck',(-.12,-.10,-.08)),('sphere',(-.1,0.,.1)),
                ('torus',(-.19,0.,.30,.34))]
@@ -22,8 +22,10 @@ def run(selection):
                 # Поле не переналаштовується при зміні сітки витягування.
                 for resolution in ((25,41,65) if dim==3 else (51,101,201)):
                     for q in measure(model,geometry,resolution,offsets):
-                        rows.append(dict(shape=shape,method=method,h=h,seed=42,status='ok',**q,**gradients))
+                        rows.append(dict(shape=shape,method=method,h=h,seed=42,status='ok',
+                                         order=info['order'],rho=info['rho'],delta_ratio=info['delta_ratio'],**q,**gradients))
             except (ValueError,RuntimeError) as error:
-                rows.append(dict(shape=shape,method=method,h=h,status='failed',error=str(error)))
+                rows.append(dict(shape=shape,method=method,h=h,order=chosen['config']['order'],
+                                 status='failed',error=str(error)))
         print('Resolution study',shape,'complete',flush=True)
     return rows

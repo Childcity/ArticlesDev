@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import streamlit as st
-from comparators import CountedGeometry,build
+from comparators import CountedGeometry,build,PG_ORDER
 from experiment4 import case
 from quality import measure,gradient_quality
 from core import sampling
@@ -19,7 +19,9 @@ def read(name):return json.loads((OUT/(name+'.json')).read_text())
 def show(page):
     if not (OUT/'summary.json').exists():
         st.info('Спочатку виконайте run_extended.py для відтворюваного добору та серій.');return
-    st.caption('Параметри заморожено до перевірки. Медіани описові; цифрова топологія залежить від роздільності.')
+    if read('protocol').get('pg_order')!=PG_ORDER:
+        st.info('Для протоколу extended з n=4 виконайте run_extended.py.');return
+    st.caption('Псевдогаусове ядро: n=4. Параметри заморожено до перевірки. Медіани описові; цифрова топологія залежить від роздільності.')
     selected=read('selection')
     if page.startswith('4'):
         df=pd.DataFrame(read('holdout'))

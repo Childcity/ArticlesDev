@@ -22,7 +22,7 @@ with st.sidebar:
     h=st.slider('Крок h',.16,.4,.24,.02,on_change=request_calculation)
     ratio=st.slider('Крок ізоліній Δ/h',.1,1.,.5,.05,on_change=request_calculation)
     rho=st.slider('ρ = r/h',.5,3.,2.,.1,on_change=request_calculation)
-    order=st.slider('Порядок гладкості n',1,4,2,on_change=request_calculation)
+    order=st.slider('Порядок гладкості n',1,4,4,on_change=request_calculation)
     margin=st.checkbox('Граничний запас r',True)
     shape=st.selectbox('Форма',e2.SHAPES)
     angle=st.slider('Поворот, градуси',0.,90.,25.,5.,on_change=request_calculation)

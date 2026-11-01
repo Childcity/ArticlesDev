@@ -6,6 +6,7 @@ from streamlit.testing.v1 import AppTest
 def test_three_interactive_pages():
     app=AppTest.from_file(str(Path(__file__).parents[1]/'app.py'),default_timeout=60).run()
     assert not app.exception
+    assert next(s for s in app.slider if s.label=='Порядок гладкості n').value==4
     for page in ['1. Ядро та стійкість','2. Геометрія та офсети','3. Параметри']:
         app.radio[0].set_value(page).run()
         next(b for b in app.button if b.label=='Обчислити').click().run()

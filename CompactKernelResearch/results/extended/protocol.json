@@ -1,6 +1,289 @@
 {
-  "version": "extended-4-6-v1",
-  "date": "2026-11-01",
+  "version": "extended-4-6-n4-v1",
+  "date": "2026-11-02",
+  "pg_order": 4,
+  "failure_configurations": [
+    {
+      "h": 0.2,
+      "rho": 0.5,
+      "order": 4,
+      "strategy": "grid",
+      "delta_ratio": 0.5
+    },
+    {
+      "h": 0.2,
+      "rho": 0.5,
+      "order": 4,
+      "strategy": "grid",
+      "delta_ratio": 1.0
+    },
+    {
+      "h": 0.2,
+      "rho": 0.5,
+      "order": 4,
+      "strategy": "isolines",
+      "delta_ratio": 0.5
+    },
+    {
+      "h": 0.2,
+      "rho": 0.5,
+      "order": 4,
+      "strategy": "isolines",
+      "delta_ratio": 1.0
+    },
+    {
+      "h": 0.2,
+      "rho": 1.0,
+      "order": 4,
+      "strategy": "grid",
+      "delta_ratio": 0.5
+    },
+    {
+      "h": 0.2,
+      "rho": 1.0,
+      "order": 4,
+      "strategy": "grid",
+      "delta_ratio": 1.0
+    },
+    {
+      "h": 0.2,
+      "rho": 1.0,
+      "order": 4,
+      "strategy": "isolines",
+      "delta_ratio": 0.5
+    },
+    {
+      "h": 0.2,
+      "rho": 1.0,
+      "order": 4,
+      "strategy": "isolines",
+      "delta_ratio": 1.0
+    },
+    {
+      "h": 0.2,
+      "rho": 1.5,
+      "order": 4,
+      "strategy": "grid",
+      "delta_ratio": 0.5
+    },
+    {
+      "h": 0.2,
+      "rho": 1.5,
+      "order": 4,
+      "strategy": "grid",
+      "delta_ratio": 1.0
+    },
+    {
+      "h": 0.2,
+      "rho": 1.5,
+      "order": 4,
+      "strategy": "isolines",
+      "delta_ratio": 0.5
+    },
+    {
+      "h": 0.2,
+      "rho": 1.5,
+      "order": 4,
+      "strategy": "isolines",
+      "delta_ratio": 1.0
+    },
+    {
+      "h": 0.2,
+      "rho": 2.0,
+      "order": 4,
+      "strategy": "grid",
+      "delta_ratio": 0.5
+    },
+    {
+      "h": 0.2,
+      "rho": 2.0,
+      "order": 4,
+      "strategy": "grid",
+      "delta_ratio": 1.0
+    },
+    {
+      "h": 0.2,
+      "rho": 2.0,
+      "order": 4,
+      "strategy": "isolines",
+      "delta_ratio": 0.5
+    },
+    {
+      "h": 0.2,
+      "rho": 2.0,
+      "order": 4,
+      "strategy": "isolines",
+      "delta_ratio": 1.0
+    },
+    {
+      "h": 0.2,
+      "rho": 3.0,
+      "order": 4,
+      "strategy": "grid",
+      "delta_ratio": 0.5
+    },
+    {
+      "h": 0.2,
+      "rho": 3.0,
+      "order": 4,
+      "strategy": "grid",
+      "delta_ratio": 1.0
+    },
+    {
+      "h": 0.2,
+      "rho": 3.0,
+      "order": 4,
+      "strategy": "isolines",
+      "delta_ratio": 0.5
+    },
+    {
+      "h": 0.2,
+      "rho": 3.0,
+      "order": 4,
+      "strategy": "isolines",
+      "delta_ratio": 1.0
+    },
+    {
+      "h": 0.3,
+      "rho": 0.5,
+      "order": 4,
+      "strategy": "grid",
+      "delta_ratio": 0.5
+    },
+    {
+      "h": 0.3,
+      "rho": 0.5,
+      "order": 4,
+      "strategy": "grid",
+      "delta_ratio": 1.0
+    },
+    {
+      "h": 0.3,
+      "rho": 0.5,
+      "order": 4,
+      "strategy": "isolines",
+      "delta_ratio": 0.5
+    },
+    {
+      "h": 0.3,
+      "rho": 0.5,
+      "order": 4,
+      "strategy": "isolines",
+      "delta_ratio": 1.0
+    },
+    {
+      "h": 0.3,
+      "rho": 1.0,
+      "order": 4,
+      "strategy": "grid",
+      "delta_ratio": 0.5
+    },
+    {
+      "h": 0.3,
+      "rho": 1.0,
+      "order": 4,
+      "strategy": "grid",
+      "delta_ratio": 1.0
+    },
+    {
+      "h": 0.3,
+      "rho": 1.0,
+      "order": 4,
+      "strategy": "isolines",
+      "delta_ratio": 0.5
+    },
+    {
+      "h": 0.3,
+      "rho": 1.0,
+      "order": 4,
+      "strategy": "isolines",
+      "delta_ratio": 1.0
+    },
+    {
+      "h": 0.3,
+      "rho": 1.5,
+      "order": 4,
+      "strategy": "grid",
+      "delta_ratio": 0.5
+    },
+    {
+      "h": 0.3,
+      "rho": 1.5,
+      "order": 4,
+      "strategy": "grid",
+      "delta_ratio": 1.0
+    },
+    {
+      "h": 0.3,
+      "rho": 1.5,
+      "order": 4,
+      "strategy": "isolines",
+      "delta_ratio": 0.5
+    },
+    {
+      "h": 0.3,
+      "rho": 1.5,
+      "order": 4,
+      "strategy": "isolines",
+      "delta_ratio": 1.0
+    },
+    {
+      "h": 0.3,
+      "rho": 2.0,
+      "order": 4,
+      "strategy": "grid",
+      "delta_ratio": 0.5
+    },
+    {
+      "h": 0.3,
+      "rho": 2.0,
+      "order": 4,
+      "strategy": "grid",
+      "delta_ratio": 1.0
+    },
+    {
+      "h": 0.3,
+      "rho": 2.0,
+      "order": 4,
+      "strategy": "isolines",
+      "delta_ratio": 0.5
+    },
+    {
+      "h": 0.3,
+      "rho": 2.0,
+      "order": 4,
+      "strategy": "isolines",
+      "delta_ratio": 1.0
+    },
+    {
+      "h": 0.3,
+      "rho": 3.0,
+      "order": 4,
+      "strategy": "grid",
+      "delta_ratio": 0.5
+    },
+    {
+      "h": 0.3,
+      "rho": 3.0,
+      "order": 4,
+      "strategy": "grid",
+      "delta_ratio": 1.0
+    },
+    {
+      "h": 0.3,
+      "rho": 3.0,
+      "order": 4,
+      "strategy": "isolines",
+      "delta_ratio": 0.5
+    },
+    {
+      "h": 0.3,
+      "rho": 3.0,
+      "order": 4,
+      "strategy": "isolines",
+      "delta_ratio": 1.0
+    }
+  ],
   "train": [
     {
       "shape": "circle",
@@ -35,8 +318,8 @@
   "candidates": {
     "pg_grid": [
       {
-        "rho": 1.5,
-        "order": 2,
+        "rho": 1.25,
+        "order": 4,
         "delta_ratio": 0.5
       },
       {
@@ -46,21 +329,21 @@
       },
       {
         "rho": 2.0,
-        "order": 2,
+        "order": 4,
         "delta_ratio": 0.5
       },
       {
-        "rho": 2.0,
+        "rho": 2.5,
         "order": 4,
         "delta_ratio": 0.5
       },
       {
         "rho": 3.0,
-        "order": 2,
+        "order": 4,
         "delta_ratio": 0.5
       },
       {
-        "rho": 3.0,
+        "rho": 4.0,
         "order": 4,
         "delta_ratio": 0.5
       }
@@ -68,7 +351,7 @@
     "pg_isolines": [
       {
         "rho": 1.5,
-        "order": 2,
+        "order": 4,
         "delta_ratio": 0.5
       },
       {
@@ -78,23 +361,23 @@
       },
       {
         "rho": 2.0,
-        "order": 2,
-        "delta_ratio": 0.25
-      },
-      {
-        "rho": 2.0,
         "order": 4,
         "delta_ratio": 0.5
       },
       {
-        "rho": 3.0,
-        "order": 2,
+        "rho": 2.0,
+        "order": 4,
         "delta_ratio": 1.0
       },
       {
         "rho": 3.0,
         "order": 4,
-        "delta_ratio": 0.25
+        "delta_ratio": 0.5
+      },
+      {
+        "rho": 3.0,
+        "order": 4,
+        "delta_ratio": 1.0
       }
     ],
     "wendland_c2_grid": [
@@ -255,7 +538,7 @@
   "failure_threshold_H": 0.1,
   "topology": "foreground 4/6 and background 8/26; boundary clipping flagged",
   "source_hashes": {
-    "app.py": "4faf3c47bc1e6df64672f2a7345b041d90ffe591aff7f96ad9ced00e5c833544",
+    "app.py": "2b154a185d6bf02ac811222cbb361e217be719d6c75a2ad7e79789c4a125c24a",
     "core.py": "c8f32a2eb6a3c8e1ec48b610e5af4044b2025a7bfda8c8f14cef9c86dc445c28",
     "experiment1.py": "4c011677802e9b50b2c20e87d8dec0c4c641f9358026aae21700a8139cd60a44",
     "experiment2.py": "cb411961a5e89dabae3db7038d5ae502402fd2558ab9e303acee6053496e3930",
@@ -263,17 +546,17 @@
     "generate.py": "156dc121354ca848ce921e261a3f2b0366023ba3632b1f91dabffcae88a20aaa",
     "reports.py": "7815bc7db24ff4651e8358e74c342f464673df9873545cebc9051da0008ca77c",
     "storage.py": "e64cf0a273a5abe10d209d157a6f489b1f281995b92b5d6dbd245911aa0383e6",
-    "extended_app.py": "c161811a2230695ceff627e56b17323127f3afb9e2c74395d9ffa219688bf106",
+    "extended_app.py": "49612736246b5c5d83d40a2591003659528487b8772734216d7fba730799d582",
     "quality.py": "f917015d04d5491007d83a014048232633bc3bc17bdd590244e6cf6fdaed679c",
-    "comparators.py": "1e09ed23e150a51ee79bf335dc670888b7f6ed5e8d97231839b92fc1be0da13c",
-    "experiment6.py": "baf0f991988607d072209b2dd5cde626cd5d23ea0283cef9a3b932f599ddf96f",
-    "experiment5.py": "96e7d684c46858fc1e1f2cb844b30a9c1b07c670e89a063ff6dcb590afbbf55f",
+    "comparators.py": "ef7998677df7d433ac37a2643d2f458abedd5bdab2da3e9ac9964480290b6157",
+    "experiment6.py": "8fbad824425e4b18f8d49556c61820337e951b925324f93ea46e8aab4d03e42f",
+    "experiment5.py": "89b6c947a2d152128bbc1a097ba6fd9ad766aad3fb89d21b57ca8c960c19c3ac",
     "editing.py": "78c0393c962d8a96b88b2943e25680e482208c004c8bee32afab04e9e408ed79",
     "geometry.py": "70e8c3ac2e37ae2e2606f8a9acfd294b41d1e0b56329a9ca57f54e8aba52f87f",
     "experiment4.py": "e397c9a5ad5f2015fb7e350a434c9a0f5cb04c1533cd606a3d2a86d2860b2a4b",
-    "extended_reports.py": "f32213af78ec068712d28fc222e747360676c483e18f96e5db46beba59030ab1",
+    "extended_reports.py": "3026a8b82b76440f1dffa9317d589400aee4981172a1cbe14eaaf8ea52c798d1",
     "resource_worker.py": "397698e6aff6514877317bb7dae2897760fe53c398054d75f0c9f28911df388a",
-    "run_extended.py": "15432290edc11aa02e00e4aee2c13fa4daa664d98dfc16d8bf8677824cad59bd"
+    "run_extended.py": "3288976d58ab29ba84385fe68b5f5c9d228aca5d79a7821b8204960ca5e7b5dd"
   },
   "environment": {
     "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",

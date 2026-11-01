@@ -9,21 +9,26 @@ st.set_page_config(page_title='Pseudo-Gaussian interpolation',layout='wide')
 st.title('Псевдогаусова інтерполяція зі статті')
 st.caption('Центри ядер фіксовані; авторська стратегія вибирає найближчі точки рівнів SDF=qΔ.')
 page=st.sidebar.radio('Експеримент',['1. Ядро та стійкість','2. Геометрія та офсети','3. Параметри'])
-with st.sidebar.form('parameters'):
+def request_calculation():
+    st.session_state['calculation_requested']=True
+
+
+with st.sidebar:
     strategy=st.selectbox('Точки інтерполяції',['isolines','grid'],index=0)
-    h=st.slider('Крок h',.16,.4,.24,.02)
-    ratio=st.slider('Крок ізоліній Δ/h',.1,1.,.5,.05)
-    rho=st.slider('ρ = r/h',.5,3.,2.,.1)
-    order=st.slider('Порядок гладкості n',1,4,2)
+    h=st.slider('Крок h',.16,.4,.24,.02,on_change=request_calculation)
+    ratio=st.slider('Крок ізоліній Δ/h',.1,1.,.5,.05,on_change=request_calculation)
+    rho=st.slider('ρ = r/h',.5,3.,2.,.1,on_change=request_calculation)
+    order=st.slider('Порядок гладкості n',1,4,2,on_change=request_calculation)
     margin=st.checkbox('Граничний запас r',True)
     shape=st.selectbox('Форма',e2.SHAPES)
-    angle=st.slider('Поворот, градуси',0.,90.,25.,5.)
-    shift=st.slider('Зсув уздовж x',-.15,.15,.03,.01)
-    offset=st.slider('Офсет t',-.6,.4,0.,.02)
-    resolution=st.select_slider('Роздільність оцінки 2D / 3D',options=[31,51,71,101],value=51)
+    angle=st.slider('Поворот, градуси',0.,90.,25.,5.,on_change=request_calculation)
+    shift=st.slider('Зсув уздовж x',-.15,.15,.03,.01,on_change=request_calculation)
+    offset=st.slider('Офсет t',-.6,.4,0.,.02,on_change=request_calculation)
+    resolution=st.select_slider('Роздільність оцінки 2D / 3D',options=[31,51,71,101],value=51,on_change=request_calculation)
     surface=st.checkbox('Показати об’ємну ізоповерхню',True)
-    submitted=st.form_submit_button('Обчислити')
-if submitted:
+    submitted=st.button('Обчислити')
+calculation_requested=st.session_state.pop('calculation_requested',False)
+if submitted or calculation_requested:
     with st.spinner('Обчислення…'):
         try:
             if page.startswith('1'):

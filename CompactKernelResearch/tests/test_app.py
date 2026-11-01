@@ -38,3 +38,24 @@ def test_optimizer_and_coefficient_download():
     assert len(app.json)==1
     assert len(app.dataframe)==1
     assert len(app.get('download_button'))==1
+
+
+def test_slider_change_calculates_without_button():
+    import json
+
+    app=AppTest.from_file(str(Path(__file__).parents[1]/'app.py'),default_timeout=60).run()
+    assert len(app.json)==0
+    next(s for s in app.slider if s.label=='Крок h').set_value(.28).run()
+    assert not app.exception
+    assert len(app.json)==1
+    assert json.loads(app.json[0].value)['h']==.28
+    next(s for s in app.slider if s.label=='ρ = r/h').set_value(1.8).run()
+    assert not app.exception
+    assert json.loads(app.json[0].value)['rho']==1.8
+    next(s for s in app.select_slider if s.label=='Роздільність оцінки 2D / 3D').set_value(31).run()
+    assert not app.exception
+    assert len(app.json)==1
+    # A later rerun must not reuse the slider's calculation request.
+    app.run()
+    assert not app.exception
+    assert len(app.json)==0

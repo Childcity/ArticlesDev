@@ -5,6 +5,9 @@
 		}
 	],
 	"settings": {
+		"latex-workshop.formatting.latex": "latexindent",
+		"latex-workshop.latex.recipe.default": "latexmk (xelatex)",
+		"latex-workshop.latex.autoBuild.run": "onSave",
 		"cSpell.language": "en,uk",
 		"cSpell.import": [
 			"https://cdn.jsdelivr.net/npm/@cspell/dict-uk-ua/cspell-ext.json",

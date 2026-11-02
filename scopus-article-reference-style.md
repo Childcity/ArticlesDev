@@ -53,7 +53,7 @@ Use this order unless the user's instructions or journal requirements override i
 10. Selection of the principal design variable or experimental setting, with illustrative results.
 11. Discussion, including limitations, a failure case where available, parameter effects, and a focused follow-up experiment.
 12. Conclusion.
-13. Conflict of interest; funding; data availability; use of artificial intelligence.
+13. Conflict of interest; funding; data availability;
 14. References.
 
 The supplied document places Ukrainian front matter before English front matter and includes an overview figure between the English abstract and keywords. Preserve these placements only when compatible with the chosen journal. In the absence of a bilingual requirement, write the English version and omit duplicate translations, without removing any distinct scientific content. Add journal-required sections such as ethics approval, author contributions, or code availability when applicable; they are additions to the reference, not sections found in it.

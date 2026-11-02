@@ -22,7 +22,8 @@
 			"Runge",
 			"Sydorenko",
 			"XeLaTeX"
-		]
+		],
+		"gitlens.hovers.enabled": false
 	},
 	"extensions": {
 		"recommendations": [

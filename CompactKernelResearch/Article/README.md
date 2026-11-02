@@ -19,3 +19,23 @@ The main evidence is protocol `extended-4-6-n4-v1` at repository commit `b514b8e
 The original README commands were previously checked in this session: 96 tests passed; `generate.py` completed. Those commands concern implementation checks and earlier experiments, not a rerun of the extended evidence. Generated earlier results were restored before this work. The article script leaves all research inputs unchanged.
 
 `EvidenceLedger.md` records scientific support and verification limits. `ParagraphPlan.md` maps the required writing functions. Journal selection and author declarations remain open.
+
+## Ukrainian translation and review
+
+- `main.uk.tex` / `main.uk.pdf`: complete Ukrainian translation; original figure PDFs are reused, with translated captions and table headers. Mathematical notation, numerical results and unresolved source/author markers are preserved. Bibliography titles remain in their original language.
+- `Review.uk.md`: substantive Ukrainian review of structure, novelty, results and limitations, based on commit `84c3f01`, code/data inspection and a targeted literature search. Includes reproducible descriptive comparisons, source links and prioritized recommendations.
+- During review the publisher page became accessible and revealed that the 2025 antecedent has five authors. The shared bibliography and English prose were corrected; this does not establish authorship of the present manuscript. Other review recommendations remain proposed revisions.
+
+Build the Ukrainian version from this directory (XeLaTeX, Polyglossia and a Cyrillic-capable DejaVu Serif font):
+
+```bash
+../../.venv/bin/python localize_tables.py
+xelatex -interaction=nonstopmode -halt-on-error main.uk.tex
+bibtex main.uk
+xelatex -interaction=nonstopmode -halt-on-error main.uk.tex
+xelatex -interaction=nonstopmode -halt-on-error main.uk.tex
+```
+
+Run `localize_tables.py` after `prepare.py` when regenerating data tables. It replaces headers only, preserving every data row. The review introduces no new benchmark runs. Its relative differences are derived from the existing raw records.
+
+Translation checks and the current TeX hyphenation limitation are documented in `TranslationNotes.uk.md`. The Ukrainian PDF was inspected on all 12 pages. Both versions compile with resolved references and no missing characters or overfull boxes.

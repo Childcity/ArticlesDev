@@ -1,0 +1,12 @@
+\begin{tabular}{lrrrrr}\toprule
+Method & Cache prep (s) & Update (s) & Rebuild (s) & Cached RMSE & Rebuilt RMSE \\ \midrule
+pg\_grid & 0.0655 & 0.00121 & 0.0638 & 0.01695 & 0.01695 \\
+pg\_isolines & 0.0853 & 0.00123 & 0.0846 & 0.02378 & 0.02442 \\
+wendland\_c2\_grid & 0.8615 & 0.00392 & 0.8472 & 0.01267 & 0.01267 \\
+wendland\_c2\_isolines & 0.3860 & 0.00251 & 0.5097 & 0.01953 & 0.02108 \\
+wendland\_c4\_grid & 0.1991 & 0.00182 & 0.1841 & 0.01178 & 0.01178 \\
+wendland\_c4\_isolines & 0.3946 & 0.00240 & 0.5163 & 0.01854 & 0.02009 \\
+linear & 0.0000 & 0.00014 & 0.0002 & 0.03844 & 0.03844 \\
+cubic & 0.1553 & 0.00219 & 0.0892 & 0.01205 & 0.01205 \\
+cubic\_redistance & 0.1533 & 0.01061 & 0.0982 & 0.07265 & 0.07265 \\
+\bottomrule\end{tabular}

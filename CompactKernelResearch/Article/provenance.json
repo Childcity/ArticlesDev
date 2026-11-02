@@ -1,0 +1,67 @@
+{
+  "protocol": "extended-4-6-n4-v1",
+  "unresolved_offsets": {
+    "2D/pg_grid": 0,
+    "2D/pg_isolines": 0,
+    "2D/wendland_c2_grid": 0,
+    "2D/wendland_c2_isolines": 0,
+    "2D/wendland_c4_grid": 0,
+    "2D/wendland_c4_isolines": 0,
+    "2D/linear": 0,
+    "2D/cubic": 0,
+    "2D/cubic_redistance": 0,
+    "3D/pg_grid": 0,
+    "3D/pg_isolines": 1,
+    "3D/wendland_c2_grid": 0,
+    "3D/wendland_c2_isolines": 0,
+    "3D/wendland_c4_grid": 0,
+    "3D/wendland_c4_isolines": 0,
+    "3D/linear": 0,
+    "3D/cubic": 0,
+    "3D/cubic_redistance": 0
+  },
+  "source_hashes_verified": true,
+  "inputs": {
+    "by_shape.json": "52254fe420a6fd83b4ce8c199315aef5b6f91ee2d88b372ad1455bf4174833cb",
+    "failure_map.json": "de3d6be318d802b2794b85ef6bccba35b240b59deebafcc96ec340a9622edb54",
+    "holdout.json": "2b09c1f01ffbc36d16ee5897c569d321c3fa36976af444be7453601ae003e9fb",
+    "protocol.json": "2d527eef3452b308772643ea301562e6878ab2a84c575015a8b672079e5b087b",
+    "resolution.json": "33140a1c4f5c4988a18ad8c05c39f1c2b317a43d4733f726be621cf3377620b1",
+    "resources.json": "d72b6c01221bd383db04cb49bd0a3a9453337d9b7c2522f01db286b5a416ae1a",
+    "selection.json": "438204c51bbe7ec49b53bf31923f364aac391c8fcd971f173aed0b83c837a7b5",
+    "summary.json": "49601cc461f05766c97a06418a113afff29c846452e3f0397d7dd921d82b054f",
+    "training.json": "0285ded8ac8208858a278d76ad1f41e99c6459e121a6216a37f8a382f4b151e3"
+  },
+  "examples": [
+    {
+      "shape": "capsule",
+      "seed": 11,
+      "h": 0.3,
+      "angle": 35.75709750246038,
+      "shift": -0.00011554200958160954,
+      "offset": 0.0,
+      "resolution": 81,
+      "rho": 2.0,
+      "delta_ratio": 0.5,
+      "grid_rmse": 0.018268888957604205,
+      "isoline_rmse": 0.014569105757172084,
+      "ratio": 0.7974817620809869
+    },
+    {
+      "shape": "two_circles",
+      "seed": 12,
+      "h": 0.3,
+      "angle": 40.28050495001251,
+      "shift": 0.07148047085750793,
+      "offset": -0.1,
+      "resolution": 81,
+      "rho": 2.0,
+      "delta_ratio": 0.5,
+      "grid_rmse": 0.01620654370163508,
+      "isoline_rmse": 0.02660460220000807,
+      "ratio": 1.6415963014571657
+    }
+  ],
+  "aggregation": "Median of all successful rows by method/dimension; seed range of three seed medians. Resource and editing table: torus h=.4, recorded medians; editing error median over three shifts.",
+  "note": "Only two stored 2D configurations reconstructed for figures. No tuning or benchmark timings rerun."
+}

@@ -1,0 +1,134 @@
+{
+  "protocol": "extended-4-6-n4-v1",
+  "source_hashes_verified": true,
+  "generator_sha256": "ce4b6ef5eecfbec642e57566febda9765f9ebaea21250a73e2e68c2216d05c41",
+  "inputs": {
+    "protocol": "2d527eef3452b308772643ea301562e6878ab2a84c575015a8b672079e5b087b",
+    "selection": "438204c51bbe7ec49b53bf31923f364aac391c8fcd971f173aed0b83c837a7b5",
+    "holdout": "2b09c1f01ffbc36d16ee5897c569d321c3fa36976af444be7453601ae003e9fb"
+  },
+  "domain": [
+    -1,
+    1
+  ],
+  "extraction_resolution": 65,
+  "slice_resolution": 201,
+  "slice_plane": "y=0",
+  "note": "Preview only; frozen configurations, no retuning. Metrics checked on the archived grid, not the display grid.",
+  "examples": [
+    {
+      "seed": 10,
+      "h": 0.4,
+      "offset": 0.0,
+      "angle": 66.37206325627209,
+      "shift": -0.0467709103873365,
+      "configs": {
+        "pg_grid": {
+          "rho": 2.0,
+          "order": 4,
+          "delta_ratio": 0.5
+        },
+        "pg_isolines": {
+          "rho": 2.0,
+          "order": 4,
+          "delta_ratio": 0.5
+        }
+      },
+      "metric_checks": {
+        "pg_grid": [
+          {
+            "offset": 0.0,
+            "resolution": 31,
+            "archived_band_rmse": 0.02076099183135313,
+            "recomputed_band_rmse": 0.02076099183135313
+          }
+        ],
+        "pg_isolines": [
+          {
+            "offset": 0.0,
+            "resolution": 31,
+            "archived_band_rmse": 0.05126559520063596,
+            "recomputed_band_rmse": 0.05126559520063596
+          }
+        ]
+      },
+      "surfaces": {
+        "reference": {
+          "vertices": 6136,
+          "faces": 12272
+        },
+        "pg_grid": {
+          "vertices": 6596,
+          "faces": 13192
+        },
+        "pg_isolines": {
+          "vertices": 7726,
+          "faces": 15456
+        }
+      },
+      "files": [
+        "torus_seed10_h0.4_t0_3d.png",
+        "torus_seed10_h0.4_t0_3d.pdf",
+        "torus_seed10_h0.4_t0_section.png",
+        "torus_seed10_h0.4_t0_section.pdf"
+      ]
+    },
+    {
+      "seed": 10,
+      "h": 0.5,
+      "offset": 0.0,
+      "angle": 66.37206325627209,
+      "shift": -0.0467709103873365,
+      "configs": {
+        "pg_grid": {
+          "rho": 2.0,
+          "order": 4,
+          "delta_ratio": 0.5
+        },
+        "pg_isolines": {
+          "rho": 2.0,
+          "order": 4,
+          "delta_ratio": 0.5
+        }
+      },
+      "metric_checks": {
+        "pg_grid": [
+          {
+            "offset": 0.0,
+            "resolution": 31,
+            "archived_band_rmse": 0.04146786136327015,
+            "recomputed_band_rmse": 0.04146786136327015
+          }
+        ],
+        "pg_isolines": [
+          {
+            "offset": 0.0,
+            "resolution": 31,
+            "archived_band_rmse": 0.057283724911015785,
+            "recomputed_band_rmse": 0.057283724911015785
+          }
+        ]
+      },
+      "surfaces": {
+        "reference": {
+          "vertices": 6136,
+          "faces": 12272
+        },
+        "pg_grid": {
+          "vertices": 7576,
+          "faces": 15152
+        },
+        "pg_isolines": {
+          "vertices": 3968,
+          "faces": 7928
+        }
+      },
+      "files": [
+        "torus_seed10_h0.5_t0_3d.png",
+        "torus_seed10_h0.5_t0_3d.pdf",
+        "torus_seed10_h0.5_t0_section.png",
+        "torus_seed10_h0.5_t0_section.pdf"
+      ]
+    }
+  ]
+}

@@ -39,3 +39,17 @@ xelatex -interaction=nonstopmode -halt-on-error main.uk.tex
 Run `localize_tables.py` after `prepare.py` when regenerating data tables. It replaces headers only, preserving every data row. The review introduces no new benchmark runs. Its relative differences are derived from the existing raw records.
 
 Translation checks and the current TeX hyphenation limitation are documented in `TranslationNotes.uk.md`. The Ukrainian PDF was inspected on all 12 pages. Both versions compile with resolved references and no missing characters or overfull boxes.
+
+## Torus previews (not included in the manuscripts)
+
+From this directory, generate separate reference / PG grid / PG isolines comparisons:
+
+```bash
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 ../../.venv/bin/python preview_torus.py
+```
+
+Outputs are PNG and PDF files in `previews/torus/`: a 3D surface and an `xz` cross-section at `y=0` for each grid spacing (`h=0.4`, `0.5`). The default is seed 10, zero offset, with a 65³ display grid and a 201² slice grid. In the slices, black dashed contours are the reference and blue contours are the displayed field. All panels share the same scale and 3D viewing angle. Empty model surfaces are explicitly labelled.
+
+The generator reconstructs the frozen configurations from `selection.json`, verifies research source hashes and checks band RMSE against `holdout.json` at the archived resolution. Display resolution is independent of interpolation spacing. `manifest.json` records parameters, input hashes, metric checks and output names. No training is repeated; neither manuscript nor its figures are modified.
+
+Optional arguments: `--seed 11`, `--h 0.4`, `--offsets -0.1 0 0.1`, `--resolution 81`, `--slice-resolution 301`, `--output /tmp/torus-preview`. Use a separate output directory for alternative settings to retain the default previews and their manifest.

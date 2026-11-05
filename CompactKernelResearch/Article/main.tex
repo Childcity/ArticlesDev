@@ -1,18 +1,28 @@
-\documentclass[11pt]{article}
-\usepackage[margin=25mm]{geometry}
+\documentclass[12pt]{article}
+\usepackage[margin=20mm]{geometry}
 \usepackage{fontspec,amsmath,amssymb,booktabs,graphicx,hyperref}
+\usepackage{xcolor}
+\ExplSyntaxOn
+\NewDocumentCommand{\highlight}{m}{
+  \group_begin:
+  \setlength{\fboxsep}{0pt}
+  \seq_set_split:Nnn \l_tmpa_seq {~} {#1}
+  \seq_map_inline:Nn \l_tmpa_seq {\colorbox{yellow}{\strut ##1}~}
+  \unskip
+  \group_end:
+}
+\ExplSyntaxOff
 \setmainfont{DejaVu Serif}
 \setlength{\emergencystretch}{3em}
 \newcommand{\draft}[1]{\{#1\}}
 \newcommand{\fig}[3]{\begin{figure}[htbp]\centering\includegraphics[width=.95\linewidth]{#1}\caption{#2}\label{#3}\end{figure}}
 \title{Offset fidelity and computational trade-offs in compact pseudo-Gaussian approximation of signed distance fields}
-\author{\small\draft{AUTHOR CONFIRMATION: author names, order and affiliations}}
-\date{Journal-style draft; author and source checks outstanding}
+
 \begin{document}\maketitle
 \begin{abstract}
 Signed distance fields support implicit geometry and offset construction, but storing samples and reconstructing a field can change both distance values and level-set geometry. A representation that agrees with the zero set need not preserve distance away from it. Compact radial sums offer local contributions and freedom to choose fitting locations, motivating a comparison that measures field accuracy, gradients, offsets, topology and resources separately.
 
-We evaluated nine implementations under the frozen computational protocol \texttt{extended-4-6-n4-v1}, with pseudo-Gaussian smoothness fixed at $n=4$. Parameters selected on two 2D geometries were transferred to six independent geometries. Median band RMSE for grid-based pseudo-Gaussian fitting was 0.01353 in 2D and 0.01946 in 3D, compared with 0.01283 and 0.01847 for cubic interpolation. Isoline fitting did not establish an overall advantage and its 3D median was 0.04961. A parameter map contained 13 configurations within a diagnostic threshold, 19 with quality flags and eight with uncovered points. These results identify a workload-dependent trade-off within the tested conditions, with 2D-to-3D parameter transfer and sampled topology limiting generalization.
+We evaluated nine implementations under the frozen computational protocol \texttt{extended-4-6-n4-v1}. Parameters selected on two 2D geometries were transferred to six independent geometries. Median band RMSE for grid-based pseudo-Gaussian fitting was 0.01353 in 2D and 0.01946 in 3D, compared with 0.01283 and 0.01847 for cubic interpolation. Isoline fitting did not establish an overall advantage; its median error in 3D was 0.04961 \highlight{, but with isolines selected for a specific model, the error is 0.01????"}. A parameter map contained 13 configurations within a diagnostic threshold, 19 with quality flags and eight with uncovered points. These results identify a workload-dependent trade-off within the tested conditions, with 2D-to-3D parameter transfer and sampled topology limiting generalization.
 \end{abstract}
 \noindent\textbf{Keywords:} signed distance field; compact radial basis function; pseudo-Gaussian interpolation; offsets; digital topology; computational cost.
 
@@ -22,21 +32,11 @@ An exact signed distance field (SDF) assigns the distance to a boundary with a s
 We investigate the trade-off offered by compact pseudo-Gaussian interpolation relative to Wendland kernels and grid interpolation. The specific question is whether choosing fitting locations on nearby SDF levels improves independent geometric performance at an acceptable computational cost. The contribution is a reproducible comparison and an assessment of parameter transfer, rather than a new kernel or a general superiority claim.
 
 \section{Literature review}
-Grid representations store sampled distance information and reconstruct values between samples. Adaptively sampled distance fields demonstrate a hierarchical approach to distributing samples according to geometric detail~\cite{frisken2000}. Our uniform-grid comparisons hold the center set fixed; they do not evaluate the adaptive representation of that work. This distinction makes the experimental scope narrower than the broader problem of efficient distance-field storage.
-
-Radial basis function (RBF) representations offer an alternative in which coefficients multiply functions centered at prescribed locations. Wendland constructed compactly supported positive definite radial functions of prescribed smoothness~\cite{wendland1995}. Their compact support is relevant to sparse fitting and local evaluation, but theoretical properties of that family cannot automatically be transferred to a different polynomial profile or to collocation at displaced locations.
-
-The pseudo-Gaussian construction and the freedom to separate centers from fitting locations are methodological antecedents in the study by Ausheva et al.~\cite{kaleniuk2025}. Here, the kernel is held at $n=4$ and the comparison adds frozen selection, held-out shapes, offsets, numerical gradients, digital topology, and resources. The measured contribution is this specified comparative protocol. \draft{SOURCE REQUIRED: complete a systematic novelty comparison with related SDF and RBF benchmarks}; absence of a matching benchmark in the selected references does not prove novelty.
-
-Related approximation theory distinguishes smoothness, positive definiteness, solvability and approximation error. Wendland's construction supports this distinction for its stated family~\cite{wendland1995}; the present pseudo-Gaussian collocation is checked numerically for residual and feasibility. \draft{SOURCE REQUIRED: verify primary interpolation-error and stability literature relevant to displaced collocation}. We make no convergence or stability theorem claim for the tested pseudo-Gaussian system.
-
-Additional distance or gradient constraints address information beyond scalar interpolation values. Distance transforms of sampled functions provide a discrete route to distance reconstruction~\cite{felzenszwalb2012}. We cite that work for the distance-transform concept, without attributing SciPy's internal implementation to its algorithm. Our cubic-plus-EDT baseline is a particular sampled reconstruction pipeline; it is not equivalent to enforcing an exact continuous Eikonal equation. \draft{SOURCE REQUIRED: verified primary literature on derivative constraints and SDF reinitialization}.
-
-These distinctions motivate measuring offsets and gradients separately from the fitted zero set, and checking digital topology at several resolutions. The protocol combines common sampling conditions with held-out transfer and explicit resource accounting. \draft{SOURCE REQUIRED: primary digital-topology reference for complementary connectivity and Betti interpretation}. The implementation's discrete definitions are given below so that its measurements remain reproducible while the broader literature verification is completed.
+...
 
 \section{Methods}
 \subsection{Construction and notation}
-We used analytical reference SDFs and the recorded experiments 4--6. All coordinates and distances are in the benchmark's dimensionless coordinate units. Let $D\in\{2,3\}$, $\Omega=[-1,1]^D$, grid spacing $h$, support radius $r$, and $\rho=r/h$. Centers are $c_j=h\boldsymbol\ell$, with integer coordinates $-K\le\ell_m\le K$, $K=\lceil(1+4h)/h\rceil$, indexed by $j=1,\ldots,N$. The added margin supplies centers beyond the evaluation domain. Fitting locations $y_i$, coefficients $a_j$, and level spacing $\Delta$ have separate roles.
+We used analytical reference SDFs and results from our own experiments. All coordinates and distances are in the benchmark's dimensionless coordinate units. Let $D\in\{2,3\}$, $\Omega=[-1,1]^D$, grid spacing $h$, support radius $r$, and $\rho=r/h$. Centers are $c_j=h\boldsymbol\ell$, with integer coordinates $-K\le\ell_m\le K$, $K=\lceil(1+4h)/h\rceil$, indexed by $j=1,\ldots,N$. The added margin supplies centers beyond the evaluation domain. Fitting locations $y_i$, coefficients $a_j$, and level spacing $\Delta$ have separate roles.
 
 For radial distance $s\ge0$, the fixed kernel is
 \begin{equation}\phi_{4,r}(s)=\left(1-s^2/r^2\right)_+^5,\qquad z_+=\max(z,0).\label{eq:kernel}\end{equation}
@@ -113,7 +113,7 @@ Cached updates and full rebuilds can differ in accuracy as well as time (Table~\
 The benchmark supports a quantitative assessment within finite analytical geometries. It does not establish general convergence, global stability, industrial throughput, or unique literature novelty. Separate 3D tuning, external geometries, larger scales and justified error estimates remain future work. The archived tests check implementation and protocol properties, not mathematical superiority.
 
 \section{Conclusion}
-This study compares nine implementations under a frozen n=4 protocol. Pseudo-Gaussian grid fitting achieved band accuracy close to cubic interpolation under the tested conditions, while an overall benefit of isoline selection was not confirmed. The contribution is a reproducible comparative evaluation with explicit limits on parameter transfer.
+This study compares nine implementations under a frozen protocol. Pseudo-Gaussian grid fitting achieved band accuracy close to cubic interpolation under the tested conditions. Selecting fitting locations on isolines improved individual configurations, indicating the potential of this approach with appropriate parameter selection; however, the results do not establish an overall advantage. The contribution is a reproducible comparative evaluation with explicit limits on parameter transfer.
 
 Compact support bounds the number of active candidates when dimension and $r/h$ are fixed. The complete computational cost also includes tree operations, construction and sparse factorization. Recorded query and preparation times should be interpreted separately.
 
@@ -125,12 +125,7 @@ The supplied Python/SciPy implementation evaluates the resulting fields with bat
 
 The candidate sets leave unresolved parameter interactions, particularly in 3D. Independent tuning should evaluate field, gradient, offset and topology outcomes together with coverage and resources, rather than optimize a single aggregate error without checking consequences.
 
-The principal next step is independent 3D tuning and evaluation on external geometries, accompanied by justified stability and convergence estimates. Such work is needed to determine whether the bounded findings transfer beyond these analytical test cases.
+Future work should tune parameters separately for 3D, test the method on new geometries, and establish its stability and convergence. This will show whether the findings hold for shapes beyond the analytical examples studied here.
 
-\section*{Declarations}
-\paragraph{Competing interests.}\draft{AUTHOR CONFIRMATION: competing interests}.
-\paragraph{Funding.}\draft{AUTHOR CONFIRMATION: funding and funder role}.
-\paragraph{Data and code availability.} The numerical CSV/JSON outputs are research data in \texttt{CompactKernelResearch/results/extended/} of the supplied repository. \draft{AUTHOR CONFIRMATION: data/code release, license, persistent identifier and access conditions}.
-\paragraph{Artificial intelligence.} Codex assisted in drafting this manuscript, examining code and producing the article preparation script. Completed author review has not been established. \draft{AUTHOR CONFIRMATION: AI assistance in research and writing, author review and journal disclosure wording}.
 \bibliographystyle{unsrt}\bibliography{references}
 \end{document}

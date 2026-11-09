@@ -12,8 +12,9 @@ HERE=Path(__file__).resolve().parent
 ROOT=HERE.parent
 sys.path.insert(0,str(ROOT))
 from comparators import build,CountedGeometry,basis
-from core import sampling
+from core import sampling,select_isoline_nodes
 from quality import measure
+from preview_fitting_points import draw
 DATA=ROOT/'results/extended'
 def read(name): return json.loads((DATA/(name+'.json')).read_text())
 for d in ['tables','figures']: (HERE/d).mkdir(exist_ok=True)
@@ -50,20 +51,30 @@ for r in h:
   pairs.append((r['band_rmse']/g['band_rmse'],r,g))
 examples=[]
 for name,item in [('improvement',min(pairs,key=lambda x:x[0])),('failure',max(pairs,key=lambda x:x[0]))]:
- ratio,r,g=item;fig,axes=plt.subplots(1,3,figsize=(10,3.4));axis,points=sampling(2,81)
- geom=CountedGeometry(r['shape'],r['angle'],r['shift']);truth=geom(points).reshape(81,81)
- for ax,method in zip(axes,['reference','pg_grid','pg_isolines']):
-  if method=='reference':z=truth
-  else:
-   model,_=build(method,geom,h=r['h'],**sel[method]['config']);z=model.evaluate(points).reshape(81,81)
-   measured=next(x for x in measure(model,geom,81) if x['offset']==r['offset'])
-   stored=g if method=='pg_grid' else r
-   assert np.isclose(measured['band_rmse'],stored['band_rmse'],rtol=1e-9)
-  ax.contour(axis,axis,truth.T,levels=[r['offset']],colors='black',linestyles='dashed')
-  ax.contour(axis,axis,z.T,levels=[r['offset']],colors='#197a9b');ax.set_aspect('equal');ax.set_title(method.replace('_',' '));ax.set(xlabel='x',ylabel='y')
- fig.tight_layout();fig.savefig(HERE/'figures'/f'{name}.pdf');plt.close(fig)
- example={k:r[k] for k in ['shape','seed','h','angle','shift','offset','resolution','rho','delta_ratio']};example.update(grid_rmse=g['band_rmse'],isoline_rmse=r['band_rmse'],ratio=ratio);examples.append(example)
- caption=f"{r['shape'].replace('_',' ')}; seed {r['seed']}, h={r['h']}, rho={r['rho']}, Delta/h={r['delta_ratio']}, offset={r['offset']}, resolution 81 squared. Grid/isoline band RMSE {g['band_rmse']:.6f}/{r['band_rmse']:.6f}. Dashed: reference; blue: displayed field."
+ ratio,r,g=item;axis,points=sampling(2,401)
+ geom=CountedGeometry(r['shape'],r['angle'],r['shift'])
+ fields={'reference':geom(points).reshape(401,401)};locations={};diagnostics={}
+ for method in ['pg_grid','pg_isolines']:
+  config=sel[method]['config'];model,_=build(method,geom,h=r['h'],**config)
+  fields[method]=model.evaluate(points).reshape(401,401)
+  measured=next(x for x in measure(model,geom,r['resolution']) if x['offset']==r['offset'])
+  stored=g if method=='pg_grid' else r
+  assert np.isclose(measured['band_rmse'],stored['band_rmse'],rtol=1e-9)
+  centers=model.centers;nodes=centers.copy();delta=config['delta_ratio']*r['h']
+  if method=='pg_isolines':
+   nodes,_=select_isoline_nodes(centers,geom,config['rho']*r['h'],r['h'],delta)
+   assert np.max(abs(geom(nodes)-np.rint(geom(nodes)/delta)*delta))<1e-9
+  values=geom(nodes);residual=float(np.max(abs(model.evaluate(nodes)-values)))
+  assert residual<=1e-7*max(1,float(np.max(abs(values))))
+  locations[method]=(centers,nodes)
+  diagnostics[method]=dict(total_nodes=len(nodes),zero_nodes=int(np.sum(abs(values)<1e-9)),
+   displayed_level_nodes=int(np.sum(abs(values-r['offset'])<1e-9)),max_nodal_residual=residual)
+ title=(f"{r['shape'].replace('_',' ')} | h={r['h']:g}, t={r['offset']:g}, seed={r['seed']}, "
+        f"PG n=4, rho={r['rho']:g}, isoline levels k * {r['delta_ratio']*r['h']:g}")
+ draw(fields,axis,geom,locations,r['offset'],title,HERE/'figures',name,diagnostics)
+ example={k:r[k] for k in ['shape','seed','h','angle','shift','offset','resolution','rho','delta_ratio']};example.update(grid_rmse=g['band_rmse'],isoline_rmse=r['band_rmse'],ratio=ratio,display_resolution=401,fitting_nodes=diagnostics);examples.append(example)
+ caption=f"{r['shape'].replace('_',' ')}; seed {r['seed']}, h={r['h']}, rho={r['rho']}, Delta/h={r['delta_ratio']}, offset={r['offset']}. Contours: 401 squared; archived metrics: 81 squared. Grid/isoline band RMSE {g['band_rmse']:.6f}/{r['band_rmse']:.6f}. Black dashed: reference level; blue solid: displayed field. Gray crosses: kernel centers; orange dots: fitting nodes; segments: displacements; green rings: fitting nodes on the reference zero level. Only nodes in the plotted window are shown."
+ if r['offset']!=0:caption+=' Gray dotted: reference zero level.'
  (HERE/'tables'/f'{name}_caption.tex').write_text(caption)
 (HERE/'provenance.json').write_text(json.dumps({'protocol':p['version'],'unresolved_offsets':{str(dim)+'D/'+m:sum(r.get('sampled_offset_hausdorff') is None for r in h if r['dim']==dim and r['method']==m) for dim in [2,3] for m in sel},'source_hashes_verified':True,'inputs':{f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in DATA.glob('*.json')},'examples':examples,'aggregation':'Median of all successful rows by method/dimension; seed range of three seed medians. Resource and editing table: torus h=.4, recorded medians; editing error median over three shifts.','note':'Only two stored 2D configurations reconstructed for figures. No tuning or benchmark timings rerun.'},indent=2))
 print('Verified counts, code hashes, aggregate RMSE/seed ranges, and figure reconstructions.');print(json.dumps(examples,indent=2))

@@ -1,0 +1,133 @@
+{
+  "generator_sha256": "882262f58ba087a8a643f2a536b2c34a8130d720ab8f364db05a81e7f72af554",
+  "plot_helpers_sha256": "ce4b6ef5eecfbec642e57566febda9765f9ebaea21250a73e2e68c2216d05c41",
+  "inputs": {
+    "protocol": "2d527eef3452b308772643ea301562e6878ab2a84c575015a8b672079e5b087b",
+    "selection": "438204c51bbe7ec49b53bf31923f364aac391c8fcd971f173aed0b83c837a7b5",
+    "holdout": "2b09c1f01ffbc36d16ee5897c569d321c3fa36976af444be7453601ae003e9fb"
+  },
+  "source_hashes_verified": true,
+  "slice_resolution": 401,
+  "examples": [
+    {
+      "shape": "two_circles",
+      "seed": 12,
+      "h": 0.3,
+      "offset": -0.1,
+      "angle": 40.28050495001251,
+      "shift": 0.07148047085750793,
+      "diagnostics": {
+        "pg_grid": {
+          "config": {
+            "rho": 2.0,
+            "order": 4,
+            "delta_ratio": 0.5
+          },
+          "total_nodes": 289,
+          "zero_nodes": 0,
+          "max_nodal_residual": 8.881784197001252e-16,
+          "max_level_residual": null,
+          "nodes_file": "two_circles_seed12_h0.3_pg_grid_nodes.csv",
+          "displayed_level_nodes": 0
+        },
+        "pg_isolines": {
+          "config": {
+            "rho": 2.0,
+            "order": 4,
+            "delta_ratio": 0.5
+          },
+          "total_nodes": 289,
+          "zero_nodes": 8,
+          "max_nodal_residual": 1.1102230246251565e-15,
+          "max_level_residual": 8.881784197001252e-16,
+          "nodes_file": "two_circles_seed12_h0.3_pg_isolines_nodes.csv",
+          "displayed_level_nodes": 0
+        }
+      },
+      "files": [
+        "two_circles_seed12_h0.3_t-0.1_points.png",
+        "two_circles_seed12_h0.3_t-0.1_points.pdf"
+      ]
+    },
+    {
+      "shape": "two_circles",
+      "seed": 12,
+      "h": 0.3,
+      "offset": 0.0,
+      "angle": 40.28050495001251,
+      "shift": 0.07148047085750793,
+      "diagnostics": {
+        "pg_grid": {
+          "config": {
+            "rho": 2.0,
+            "order": 4,
+            "delta_ratio": 0.5
+          },
+          "total_nodes": 289,
+          "zero_nodes": 0,
+          "max_nodal_residual": 8.881784197001252e-16,
+          "max_level_residual": null,
+          "nodes_file": "two_circles_seed12_h0.3_pg_grid_nodes.csv",
+          "displayed_level_nodes": 0
+        },
+        "pg_isolines": {
+          "config": {
+            "rho": 2.0,
+            "order": 4,
+            "delta_ratio": 0.5
+          },
+          "total_nodes": 289,
+          "zero_nodes": 8,
+          "max_nodal_residual": 1.1102230246251565e-15,
+          "max_level_residual": 8.881784197001252e-16,
+          "nodes_file": "two_circles_seed12_h0.3_pg_isolines_nodes.csv",
+          "displayed_level_nodes": 8
+        }
+      },
+      "files": [
+        "two_circles_seed12_h0.3_t0_points.png",
+        "two_circles_seed12_h0.3_t0_points.pdf"
+      ]
+    },
+    {
+      "shape": "torus",
+      "seed": 10,
+      "h": 0.4,
+      "offset": 0.0,
+      "angle": 66.37206325627209,
+      "shift": -0.0467709103873365,
+      "diagnostics": {
+        "pg_grid": {
+          "config": {
+            "rho": 2.0,
+            "order": 4,
+            "delta_ratio": 0.5
+          },
+          "total_nodes": 3375,
+          "zero_nodes": 0,
+          "max_nodal_residual": 1.354472090042691e-14,
+          "max_level_residual": null,
+          "nodes_file": "torus_seed10_h0.4_pg_grid_nodes.csv",
+          "displayed_level_nodes": 0
+        },
+        "pg_isolines": {
+          "config": {
+            "rho": 2.0,
+            "order": 4,
+            "delta_ratio": 0.5
+          },
+          "total_nodes": 3375,
+          "zero_nodes": 6,
+          "max_nodal_residual": 8.659739592076221e-15,
+          "max_level_residual": 1.3322676295501878e-15,
+          "nodes_file": "torus_seed10_h0.4_pg_isolines_nodes.csv",
+          "displayed_level_nodes": 6
+        }
+      },
+      "files": [
+        "torus_seed10_h0.4_t0_points.png",
+        "torus_seed10_h0.4_t0_points.pdf"
+      ]
+    }
+  ]
+}

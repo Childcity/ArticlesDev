@@ -53,3 +53,31 @@ Outputs are PNG and PDF files in `previews/torus/`: a 3D surface and an `xz` cro
 The generator reconstructs the frozen configurations from `selection.json`, verifies research source hashes and checks band RMSE against `holdout.json` at the archived resolution. Display resolution is independent of interpolation spacing. `manifest.json` records parameters, input hashes, metric checks and output names. No training is repeated; neither manuscript nor its figures are modified.
 
 Optional arguments: `--seed 11`, `--h 0.4`, `--offsets -0.1 0 0.1`, `--resolution 81`, `--slice-resolution 301`, `--output /tmp/torus-preview`. Use a separate output directory for alternative settings to retain the default previews and their manifest.
+
+## Fitting points in article figures and standalone diagnostics
+
+`prepare.py` now uses the shared plotter in `preview_fitting_points.py` for both
+article geometry comparisons (`figures/improvement` and `figures/failure`, PNG/PDF).
+The figures show actual fitting nodes, fixed kernel centers, displacements and
+zero-level node counts. Both manuscripts explain these markers and the absence
+of fitting nodes on the displayed -0.1 offset. Contours use a 401² display grid;
+the reported errors are still checked on the original 81² grid. Node counts and
+maximum interpolation residuals are recorded in `provenance.json`.
+
+Run `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 ../../.venv/bin/python preview_fitting_points.py`
+from this directory. Outputs in `previews/fitting_points/` show the article's two-disk
+case at offsets -0.1 and 0, and the torus preview at h=0.4, offset 0. Gray crosses
+are fixed kernel centers, orange dots are the actual fitting nodes, green rings
+identify nodes on the reference zero level, and segments connect centers to nodes.
+The torus section shows only actual coplanar node/center pairs, not projections of
+off-plane points. Full node coordinates and reference/fitted values are exported
+to CSV; the manifest records source hashes, counts and numerical residuals.
+
+The selector chooses the nearest admissible point in the union of levels k*Delta;
+it does not enforce dense coverage of the zero level. For the two-disk example,
+Delta=0.15: eight fitting nodes are on level zero and none on the displayed -0.1
+level. For the torus at h=0.4, six fitting nodes are on the zero surface, two of
+them in y=0. The interpolant matches the SDF at fitting nodes to numerical
+precision; this does not constrain the entire contour between nodes. The extra
+zero-level two-disk and torus diagnostics remain separate previews. The benchmark
+and interpolation algorithm are unchanged.

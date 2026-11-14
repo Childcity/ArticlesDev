@@ -45,7 +45,22 @@
       "delta_ratio": 0.5,
       "grid_rmse": 0.018268888957604205,
       "isoline_rmse": 0.014569105757172084,
-      "ratio": 0.7974817620809869
+      "ratio": 0.7974817620809869,
+      "display_resolution": 401,
+      "fitting_nodes": {
+        "pg_grid": {
+          "total_nodes": 289,
+          "zero_nodes": 0,
+          "displayed_level_nodes": 0,
+          "max_nodal_residual": 1.1102230246251565e-15
+        },
+        "pg_isolines": {
+          "total_nodes": 289,
+          "zero_nodes": 4,
+          "displayed_level_nodes": 4,
+          "max_nodal_residual": 1.3322676295501878e-15
+        }
+      }
     },
     {
       "shape": "two_circles",
@@ -59,7 +74,22 @@
       "delta_ratio": 0.5,
       "grid_rmse": 0.01620654370163508,
       "isoline_rmse": 0.02660460220000807,
-      "ratio": 1.6415963014571657
+      "ratio": 1.6415963014571657,
+      "display_resolution": 401,
+      "fitting_nodes": {
+        "pg_grid": {
+          "total_nodes": 289,
+          "zero_nodes": 0,
+          "displayed_level_nodes": 0,
+          "max_nodal_residual": 8.881784197001252e-16
+        },
+        "pg_isolines": {
+          "total_nodes": 289,
+          "zero_nodes": 8,
+          "displayed_level_nodes": 0,
+          "max_nodal_residual": 1.1102230246251565e-15
+        }
+      }
     }
   ],
   "aggregation": "Median of all successful rows by method/dimension; seed range of three seed medians. Resource and editing table: torus h=.4, recorded medians; editing error median over three shifts.",

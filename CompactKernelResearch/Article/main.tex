@@ -36,7 +36,7 @@ We investigate the trade-off offered by compact pseudo-Gaussian interpolation re
 
 \section{Methods}
 \subsection{Construction and notation}
-We used analytical reference SDFs and results from our own experiments. All coordinates and distances are in the benchmark's dimensionless coordinate units. Let $D\in\{2,3\}$, $\Omega=[-1,1]^D$, grid spacing $h$, support radius $r$, and $\rho=r/h$. Centers are $c_j=h\boldsymbol\ell$, with integer coordinates $-K\le\ell_m\le K$, $K=\lceil(1+4h)/h\rceil$, indexed by $j=1,\ldots,N$. The added margin supplies centers beyond the evaluation domain. Fitting locations $y_i$, coefficients $a_j$, and level spacing $\Delta$ have separate roles.
+We used analytical reference SDFs and results from our own experiments. All coordinates and distances are in the benchmark's dimensionless coordinate units. Let $D\in\{2,3\}$ be the dimension, $\Omega=[-1,1]^D$ the evaluation domain, $h$ the grid spacing, and $r$ the kernel support radius. We use $\rho=r/h$ to express the support radius in units of grid spacing. Centers are $c_j=h\boldsymbol\ell$, with integer coordinates $-K\le\ell_m\le K$, $K=\lceil(1+4h)/h\rceil$, indexed by $j=1,\ldots,N$. The added margin supplies centers beyond the evaluation domain. Fitting locations $y_i$, coefficients $a_j$, and level spacing $\Delta$ have separate roles.
 
 For radial distance $s\ge0$, the fixed kernel is
 \begin{equation}\phi_{4,r}(s)=\left(1-s^2/r^2\right)_+^5,\qquad z_+=\max(z,0).\label{eq:kernel}\end{equation}
@@ -49,7 +49,7 @@ The field and its fitting system are
   A_{ij}=\phi_{4,r}(\|y_i-c_j\|),\qquad Aa=d(y).
   \label{eq:fit}
 \end{equation}
-Here $d(y)_i=d(y_i)$ for $i=1,\ldots,N$. The same construction applies in 2D and 3D by changing the coordinate dimension and Euclidean norm. The system is square; uniqueness is not inferred from that fact. Once fitted, evaluation requires coefficients, centers or reconstructible lattice metadata, kernel family, order and radius; fitting locations are unnecessary for evaluation but are retained for cached editing.
+Here $d(y)_i=d(y_i)$ for $i=1,\ldots,N$. The same construction applies in 2D and 3D; only the number of coordinate components changes, while the norm remains Euclidean. The system is square; uniqueness is not inferred from that fact. Once fitted, evaluation requires coefficients, centers or reconstructible lattice metadata, kernel family, order and radius; fitting locations are unnecessary for evaluation but are retained for cached editing.
 
 Grid fitting sets $y_i=c_i$. Isoline fitting chooses a nearest admissible point in the union of levels $d(y)=k\Delta$, $k\in\mathbb Z$, with $0<\Delta\le h$ and $\|y_i-c_i\|<r$. The implementation enumerates levels permitted by $|d(c_i)-k\Delta|\le r$, using the exact SDF's 1-Lipschitz property, and projects geometrically onto each level. Empty levels return nonfinite candidates and are rejected. It accepts displacement less than $r(1-10^{-12})$, updates only for an improvement exceeding $10^{-12}$, and enumerates levels in increasing order, retaining the smaller level in ties. Projectors use deterministic directions for nonunique geometric projections. Failure to find a valid point is reported explicitly; locations coincident after rounding to 11 decimals are rejected.
 

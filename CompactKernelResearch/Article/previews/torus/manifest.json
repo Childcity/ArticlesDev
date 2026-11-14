@@ -1,11 +1,11 @@
 {
   "protocol": "extended-4-6-n4-v1",
   "source_hashes_verified": true,
-  "generator_sha256": "ce4b6ef5eecfbec642e57566febda9765f9ebaea21250a73e2e68c2216d05c41",
+  "generator_sha256": "2ef46f8f3c9b689e108823f80fb7c8bdd6acf13f7086bf5a90101913b90657f5",
   "inputs": {
-    "protocol": "2d527eef3452b308772643ea301562e6878ab2a84c575015a8b672079e5b087b",
-    "selection": "438204c51bbe7ec49b53bf31923f364aac391c8fcd971f173aed0b83c837a7b5",
-    "holdout": "2b09c1f01ffbc36d16ee5897c569d321c3fa36976af444be7453601ae003e9fb"
+    "protocol": "f519454363bd96afac4309812da0ac75bc14a83d287eff812f5a1347945e2100",
+    "selection": "5cd8507ea2e7cf7c3e2f7ca552f03d94639087eb7b924eb9ae682cb6ea0c0f85",
+    "holdout": "550fb15576ceac70221b7250c9eed0f43c547095a90975ba9c40e865ae10e37f"
   },
   "domain": [
     -1,
@@ -40,7 +40,7 @@
             "offset": 0.0,
             "resolution": 31,
             "archived_band_rmse": 0.02076099183135313,
-            "recomputed_band_rmse": 0.02076099183135313
+            "recomputed_band_rmse": 0.02076099183135309
           }
         ],
         "pg_isolines": [
@@ -48,7 +48,7 @@
             "offset": 0.0,
             "resolution": 31,
             "archived_band_rmse": 0.05126559520063596,
-            "recomputed_band_rmse": 0.05126559520063596
+            "recomputed_band_rmse": 0.051265595200636026
           }
         ]
       },
@@ -97,7 +97,7 @@
             "offset": 0.0,
             "resolution": 31,
             "archived_band_rmse": 0.04146786136327015,
-            "recomputed_band_rmse": 0.04146786136327015
+            "recomputed_band_rmse": 0.0414678613632702
           }
         ],
         "pg_isolines": [
@@ -105,7 +105,7 @@
             "offset": 0.0,
             "resolution": 31,
             "archived_band_rmse": 0.057283724911015785,
-            "recomputed_band_rmse": 0.057283724911015785
+            "recomputed_band_rmse": 0.057283724911015875
           }
         ]
       },

@@ -30,6 +30,11 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def source_digest(path):
+    # Git may check out text sources with CRLF on Windows; the protocol used LF.
+    return hashlib.sha256(path.read_bytes().replace(b'\r\n', b'\n')).hexdigest()
+
+
 def save(fig, output, stem):
     for extension in ('png', 'pdf'):
         fig.savefig(output / f'{stem}.{extension}', dpi=180, bbox_inches='tight')
@@ -105,7 +110,7 @@ def main():
     if protocol['version'] != 'extended-4-6-n4-v1' or protocol['pg_order'] != 4:
         raise ValueError('Unexpected frozen protocol')
     for name, expected in protocol['source_hashes'].items():
-        if digest(ROOT / name) != expected:
+        if source_digest(ROOT / name) != expected:
             raise ValueError(f'Research source differs from frozen protocol: {name}')
     args.output.mkdir(parents=True, exist_ok=True)
     manifest = dict(

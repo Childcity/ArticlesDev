@@ -22,7 +22,8 @@ def table(name,header,rows):
     text+='\n'.join(' & '.join(str(v).replace('_',r'\_') for v in row)+r' \\' for row in rows)
     (HERE/'tables'/f'{name}.tex').write_text(text+'\n\\bottomrule\\end{tabular}\n')
 p=read('protocol'); assert p['version']=='extended-4-6-n4-v1' and p['pg_order']==4
-for f,h in p['source_hashes'].items(): assert hashlib.sha256((ROOT/f).read_bytes()).hexdigest()==h,f
+# Git may check out text sources with CRLF on Windows; the protocol used LF.
+for f,h in p['source_hashes'].items(): assert hashlib.sha256((ROOT/f).read_bytes().replace(b'\r\n',b'\n')).hexdigest()==h,f
 h=read('holdout');res=read('resolution');resources=read('resources');fm=read('failure_map');sel=read('selection');summary=read('summary')
 assert [len(read(n)) for n in ['training','holdout','resolution','failure_map','resources']]==[234,972,432,40,36]
 assert Counter(r['flag'] for r in fm)=={'within_threshold':13,'quality_threshold':19,'uncovered_support':8}

@@ -20,14 +20,14 @@
 
 \begin{document}\maketitle
 \begin{abstract}
-Signed distance fields support implicit geometry and offset construction, but storing samples and reconstructing a field can change both distance values and level-set geometry. A representation that agrees with the zero set need not preserve distance away from it. Compact radial sums offer local contributions and freedom to choose fitting locations, motivating a comparison that measures field accuracy, gradients, offsets, topology and resources separately.
+  Signed distance fields support implicit geometry and offset construction, but storing samples and reconstructing a field can change both distance values and level-set geometry. A representation that agrees with the zero set need not preserve distance away from it. Compact radial sums offer local contributions and freedom to choose fitting locations, motivating a comparison that measures field accuracy, gradients, offsets, topology and resources separately.
 
-We evaluated nine implementations under the frozen computational protocol \texttt{extended-4-6-n4-v1}. Parameters selected on two 2D geometries were transferred to six independent geometries. Median band RMSE for grid-based pseudo-Gaussian fitting was 0.01353 in 2D and 0.01946 in 3D, compared with 0.01283 and 0.01847 for cubic interpolation. Isoline fitting did not establish an overall advantage; its median error in 3D was 0.04961 \highlight{, but with isolines selected for a specific model, the error is 0.01????"}. A parameter map contained 13 configurations within a diagnostic threshold, 19 with quality flags and eight with uncovered points. These results identify a workload-dependent trade-off within the tested conditions, with 2D-to-3D parameter transfer and sampled topology limiting generalization.
+  We evaluated nine implementations under the frozen computational protocol. Parameters selected on two 2D geometries were transferred to six independent geometries. Median band RMSE for grid-based pseudo-Gaussian fitting was 0.01353 in 2D and 0.01946 in 3D, compared with 0.01283 and 0.01847 for cubic interpolation. Isoline fitting did not establish an overall advantage; its median error in 3D was 0.04961, but with isolines selected for a specific model, the error is 0.01. A parameter map contained 13 configurations within a diagnostic threshold, 19 with quality flags and eight with uncovered points. These results identify a workload-dependent trade-off within the tested conditions, with 2D-to-3D parameter transfer and sampled topology limiting generalization.
 \end{abstract}
 \noindent\textbf{Keywords:} signed distance field; compact radial basis function; pseudo-Gaussian interpolation; offsets; digital topology; computational cost.
 
 \section{Problem statement}
-An exact signed distance field (SDF) assigns the distance to a boundary with a sign indicating the side of that boundary. In practical computations, an interpolant replaces repeated access to the exact geometry. Its zero level may approximate the boundary well while its nonzero levels depart from true offsets. The representation problem therefore concerns both geometric position and distance fidelity, together with the cost of constructing, querying and modifying the field.
+An exact signed distance field (SDF) assigns the distance to a boundary with a sign indicating the side of that boundary. In this study, we construct approximate fields from samples of analytical reference SDFs using compact radial functions, grid interpolation, and grid redistancing. A reconstructed field may approximate the boundary well at its zero level while its nonzero levels depart from true offsets. The representation problem therefore concerns both geometric position and distance fidelity, together with the cost of constructing, querying and modifying the field.
 
 We investigate the trade-off offered by compact pseudo-Gaussian interpolation relative to Wendland kernels and grid interpolation. The specific question is whether choosing fitting locations on nearby SDF levels improves independent geometric performance at an acceptable computational cost. The contribution is a reproducible comparison and an assessment of parameter transfer, rather than a new kernel or a general superiority claim.
 
@@ -45,9 +45,9 @@ Its normalization is $\phi_{4,r}(0)=1$, not unit integral. It is zero for $s\ge 
 
 The field and its fitting system are
 \begin{equation}
- f(x)=\sum_{j=1}^{N}a_j\phi_{4,r}(\|x-c_j\|),\qquad
- A_{ij}=\phi_{4,r}(\|y_i-c_j\|),\qquad Aa=d(y).
- \label{eq:fit}
+  f(x)=\sum_{j=1}^{N}a_j\phi_{4,r}(\|x-c_j\|),\qquad
+  A_{ij}=\phi_{4,r}(\|y_i-c_j\|),\qquad Aa=d(y).
+  \label{eq:fit}
 \end{equation}
 Here $d(y)_i=d(y_i)$ for $i=1,\ldots,N$. The same construction applies in 2D and 3D by changing the coordinate dimension and Euclidean norm. The system is square; uniqueness is not inferred from that fact. Once fitted, evaluation requires coefficients, centers or reconstructible lattice metadata, kernel family, order and radius; fitting locations are unnecessary for evaluation but are retained for cached editing.
 
@@ -62,8 +62,8 @@ The field is used on $\Omega$. Outside the union of finite supports it is zero, 
 \subsection{Comparators and frozen selection}
 For $u=s/r$, the other compact profiles are
 \begin{equation}
-\psi_{C2}(u)=(1-u)_+^4(4u+1),\qquad
-\psi_{C4}(u)=(1-u)_+^6(35u^2+18u+3)/3.
+  \psi_{C2}(u)=(1-u)_+^4(4u+1),\qquad
+  \psi_{C4}(u)=(1-u)_+^6(35u^2+18u+3)/3.
 \end{equation}
 Each is evaluated with grid and isoline fitting locations. Linear interpolation and SciPy RegularGridInterpolator's tensor-product cubic not-a-knot scheme use the same centers and float64 precision; cubic uses a sparse direct solver. The ninth method, cubic-plus-EDT, samples cubic on an $h/2$ grid, classifies the sign, subtracts inside from outside Euclidean distance transforms, and linearly interpolates the resulting samples. Its finer payload, preprocessing and possible surface drift are part of the comparison.
 
@@ -77,8 +77,8 @@ Held-out geometries were capsule, rounded box, narrow-neck polygon, two disks, s
 \subsection{Accuracy, topology and resources}
 For extraction-grid probes $P$, let $B_t=\{x\in P:|d(x)-t|<0.2\}$. The band field error and sampled offset distance are
 \begin{equation}
- E_t=\sqrt{|B_t|^{-1}\sum_{x\in B_t}(f(x)-d(x))^2},\quad
- H_t=\max\{\max_{v\in V_f}\min_{w\in V_d}\|v-w\|,\max_{w\in V_d}\min_{v\in V_f}\|w-v\|\}.
+  E_t=\sqrt{|B_t|^{-1}\sum_{x\in B_t}(f(x)-d(x))^2},\quad
+  H_t=\max\{\max_{v\in V_f}\min_{w\in V_d}\|v-w\|,\max_{w\in V_d}\min_{v\in V_f}\|w-v\|\}.
 \end{equation}
 $V_f,V_d$ are vertices extracted at level $t$. $H_t$ is a point-cloud distance, not a certified continuous-surface Hausdorff distance. Empty or unresolved levels are recorded, not assigned zero error. The exact SDF at model vertices is a separate geometric diagnostic.
 

@@ -79,7 +79,7 @@ For extraction-grid probes $P$, let $B_t=\{x\in P:|d(x)-t|<0.2\}$. The band fiel
   E_t=\sqrt{|B_t|^{-1}\sum_{x\in B_t}(f(x)-d(x))^2},\quad
   H_t=\max\{\max_{v\in V_f}\min_{w\in V_d}\|v-w\|,\max_{w\in V_d}\min_{v\in V_f}\|w-v\|\}.
 \end{equation}
-$V_f,V_d$ are vertices extracted at level $t$. $H_t$ is a point-cloud distance, not a certified continuous-surface Hausdorff distance. Empty or unresolved levels are recorded, not assigned zero error. The exact SDF at model vertices is a separate geometric diagnostic.
+$V_f,V_d$ are vertices extracted at level $t$. $H_t$ is the Hausdorff distance between these finite vertex sets; it does not give a guaranteed bound on the distance between the complete level surfaces of $f$ and $d$. Empty or unresolved levels are recorded, not assigned zero error. The exact SDF at model vertices is a separate geometric diagnostic.
 
 Gradient measurements use 2048 Sobol points with $|d|<0.25$. Reference central differences at steps $2\times10^{-5}$ and $10^{-5}$ are accepted when their vector difference norm is below $10^{-4}$ and the fine gradient norm differs from one by less than $10^{-4}$. This numerical mask does not characterize the entire medial axis. Compact-field gradients are analytical; grid-field gradients use central differences with step $h\times10^{-5}$ (the refined grid spacing for EDT). Reported gradient RMSE is $\sqrt{\operatorname{mean}\|g-g_d\|^2}$; Eikonal RMSE is $\sqrt{\operatorname{mean}(\|g\|-1)^2}$. Normal alignment is the mean of $g\cdot g_d/(\|g\|+10^{-30})$ on the accepted set, where $g_d$ is numerically unit length.
 

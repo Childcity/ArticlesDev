@@ -28,7 +28,13 @@
 \section{Problem statement}
 An exact signed distance field (SDF) assigns the distance to a boundary with a sign indicating the side of that boundary. In this study, we construct approximate fields from samples of analytical reference SDFs using compact radial functions, grid interpolation, and grid redistancing. A reconstructed field may approximate the boundary well at its zero level while its nonzero levels depart from true offsets. The primary representation problem is to model the boundary accurately. When the field is also used to construct offsets, the fidelity of its nonzero levels becomes an additional concern. We assess these geometric outcomes alongside the cost of constructing, querying and modifying the field.
 
-We investigate the trade-off offered by compact pseudo-Gaussian interpolation relative to Wendland kernels and grid interpolation. The specific question is whether choosing fitting locations on nearby SDF levels instead of grid centers improves field, boundary and offset accuracy on geometries held out from parameter selection at an acceptable computational cost. The contribution is a reproducible comparison and an assessment of parameter transfer, rather than a new kernel or a general superiority claim.
+We compare compact pseudo-Gaussian fitting with Wendland-kernel fitting and grid interpolation through three research questions:
+\begin{itemize}
+  \item[-] For a given compact kernel, does placing fitting locations on nearby SDF levels rather than at grid centers improve field-value accuracy, boundary geometry or nonzero offsets on held-out geometries?
+  \item[-] What construction, query, editing and storage costs accompany these accuracy outcomes relative to the tested Wendland and grid methods?
+  \item[-] How do method settings selected on two 2D calibration geometries perform on six held-out geometries, including two in 3D?
+\end{itemize}
+Our contribution is a reproducible comparison and an assessment of how selected settings transfer, rather than a new kernel or a general superiority claim.
 
 \section{Literature review}
 ...

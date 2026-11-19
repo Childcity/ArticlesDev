@@ -20,6 +20,28 @@ The original README commands were previously checked in this session: 96 tests p
 
 `EvidenceLedger.md` records scientific support and verification limits. `ParagraphPlan.md` maps the required writing functions. Journal selection and author declarations remain open.
 
+## English manuscript revision: 19 November 2026
+
+The English article now focuses on the effect of interpolation-point placement at
+equal coefficient count, measuring boundary accuracy, nearby SDF values and
+computational costs. Offsets and gradients remain secondary diagnostics; geometry
+failures are retained, without claiming general applicability criteria or memory
+savings at a prescribed accuracy.
+
+`prepare.py` also generates `tables/boundary.tex` from the existing held-out
+records at offset zero. It checks 24 distinct 2D fields and 12 distinct 3D fields
+per method, reports median E_0/H_0 and digital-topology match counts, and writes
+the aggregates to `provenance.json`. Parameters, raw data and recorded timings
+are unchanged. The original pooled-offset table is still generated for the older
+Ukrainian manuscript.
+
+The revised English PDF has **12 pages including all figures, tables and
+references**, with the existing 12-point body text and 20 mm margins. Letter paper
+is explicit for reproducible pagination; references use the standard smaller
+font. Validation includes the preparation script, an independent check of the
+zero-level aggregates, XeLaTeX/BibTeX compilation, resolved references and visual
+inspection of all pages.
+
 ## Ukrainian translation and review
 
 - `main.uk.tex` / `main.uk.pdf`: complete Ukrainian translation; original figure PDFs are reused, with translated captions and table headers. Mathematical notation, numerical results and unresolved source/author markers are preserved. Bibliography titles remain in their original language.

@@ -37,6 +37,22 @@ for dim in [2,3]:
   assert np.isclose(min(seeds),s['band_rmse_seed_min']) and np.isclose(max(seeds),s['band_rmse_seed_max'])
   rows.append([s['method'],dim,f'{med:.6f}',f'{min(seeds):.6f}--{max(seeds):.6f}',f"{np.median([r['sampled_offset_hausdorff'] for r in a if r.get('sampled_offset_hausdorff') is not None]):.6f}",f"{np.median([r['gradient_rmse'] for r in a]):.5f}"])
 table('errors',['Method','$D$','Band RMSE','Seed median range','$H$','Gradient RMSE'],rows)
+# Each zero-level row represents one fitted field; do not pool its offsets.
+boundary=[];rows=[]
+for dim,count in [(2,24),(3,12)]:
+ for s in summary[f'holdout_{dim}d']:
+  a=[r for r in h if r['dim']==dim and r['method']==s['method'] and r['offset']==0]
+  assert len(a)==count and all(r['status']=='ok' for r in a)
+  assert len({(r['shape'],r['seed'],r['h']) for r in a})==count
+  assert all(r.get('sampled_offset_hausdorff') is not None for r in a)
+  record=dict(method=s['method'],dim=dim,fields=count,
+   band_rmse=float(np.median([r['band_rmse'] for r in a])),
+   sampled_hausdorff=float(np.median([r['sampled_offset_hausdorff'] for r in a])),
+   topology_matches=sum(r['topology_match'] for r in a))
+  boundary.append(record)
+  rows.append([record['method'],dim,f"{record['band_rmse']:.6f}",
+   f"{record['sampled_hausdorff']:.6f}",f"{record['topology_matches']}/{count}"])
+table('boundary',['Method','$D$','$E_0$','$H_0$','Topology matches'],rows)
 table('selection',['Method',r'$\rho$',r'$\Delta/h$','Candidates','Tuning (s)'],[[m,s['config']['rho'] if 'grid' in m or 'isolines' in m else '--',s['config']['delta_ratio'] if 'isolines' in m else '--',s['candidates'],f"{s['tuning_seconds']:.4f}"] for m,s in sel.items()])
 table('resources',['Method','$h$','Payload (B)','Build (s)','Query (s)','$H$'],[[r['method'],r['h'],r['stored_bytes'],f"{r['build_seconds']:.4f}",f"{r['query_seconds']:.4f}",f"{r['mean_offset_error']:.5f}"] for r in resources if r['dim']==3 and r['h']==.4])
 table('editing',['Method','Cache prep (s)','Update (s)','Rebuild (s)','Cached RMSE','Rebuilt RMSE'],[[r['method'],f"{r['cache_prepare_seconds']:.4f}",f"{r['cached_update_seconds']:.5f}",f"{r['full_rebuild_seconds']:.4f}",f"{np.median(r['cached_update_rmse']):.5f}",f"{np.median(r['full_rebuild_rmse']):.5f}"] for r in resources if r['dim']==3 and r['h']==.4])
@@ -77,5 +93,5 @@ for name,item in [('improvement',min(pairs,key=lambda x:x[0])),('failure',max(pa
  caption=f"{r['shape'].replace('_',' ')}; seed {r['seed']}, h={r['h']}, rho={r['rho']}, Delta/h={r['delta_ratio']}, offset={r['offset']}. Contours: 401 squared; archived metrics: 81 squared. Grid/isoline band RMSE {g['band_rmse']:.6f}/{r['band_rmse']:.6f}. Black dashed: reference level; blue solid: displayed field. Gray crosses: kernel centers; orange dots: fitting nodes; segments: displacements; green rings: fitting nodes on the reference zero level. Only nodes in the plotted window are shown."
  if r['offset']!=0:caption+=' Gray dotted: reference zero level.'
  (HERE/'tables'/f'{name}_caption.tex').write_text(caption)
-(HERE/'provenance.json').write_text(json.dumps({'protocol':p['version'],'unresolved_offsets':{str(dim)+'D/'+m:sum(r.get('sampled_offset_hausdorff') is None for r in h if r['dim']==dim and r['method']==m) for dim in [2,3] for m in sel},'source_hashes_verified':True,'inputs':{f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in DATA.glob('*.json')},'examples':examples,'aggregation':'Median of all successful rows by method/dimension; seed range of three seed medians. Resource and editing table: torus h=.4, recorded medians; editing error median over three shifts.','note':'Only two stored 2D configurations reconstructed for figures. No tuning or benchmark timings rerun.'},indent=2))
-print('Verified counts, code hashes, aggregate RMSE/seed ranges, and figure reconstructions.');print(json.dumps(examples,indent=2))
+(HERE/'provenance.json').write_text(json.dumps({'protocol':p['version'],'unresolved_offsets':{str(dim)+'D/'+m:sum(r.get('sampled_offset_hausdorff') is None for r in h if r['dim']==dim and r['method']==m) for dim in [2,3] for m in sel},'source_hashes_verified':True,'inputs':{f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in DATA.glob('*.json')},'examples':examples,'boundary':boundary,'aggregation':'Boundary table: offset=0 only, one row per method/shape/seed/h; medians of E_0 and H_0 and counts of digital-topology matches, with all 24 2D and 12 3D fields retained per method. Legacy errors table: median of all successful offset rows by method/dimension; seed range of three seed medians. Resource and editing table: torus h=.4, recorded medians; editing error median over three shifts.','note':'Only two stored 2D configurations reconstructed for figures. No tuning or benchmark timings rerun.'},indent=2))
+print('Verified counts, code hashes, zero-level groups, aggregate RMSE/seed ranges, and figure reconstructions.');print(json.dumps(examples,indent=2))

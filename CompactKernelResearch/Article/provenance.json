@@ -92,6 +92,152 @@
       }
     }
   ],
-  "aggregation": "Median of all successful rows by method/dimension; seed range of three seed medians. Resource and editing table: torus h=.4, recorded medians; editing error median over three shifts.",
+  "boundary": [
+    {
+      "method": "cubic",
+      "dim": 2,
+      "fields": 24,
+      "band_rmse": 0.014188732167264056,
+      "sampled_hausdorff": 0.03354181911000536,
+      "topology_matches": 22
+    },
+    {
+      "method": "cubic_redistance",
+      "dim": 2,
+      "fields": 24,
+      "band_rmse": 0.06239790857598676,
+      "sampled_hausdorff": 0.08441571185552693,
+      "topology_matches": 21
+    },
+    {
+      "method": "linear",
+      "dim": 2,
+      "fields": 24,
+      "band_rmse": 0.02370211987372224,
+      "sampled_hausdorff": 0.06877590873861528,
+      "topology_matches": 22
+    },
+    {
+      "method": "pg_grid",
+      "dim": 2,
+      "fields": 24,
+      "band_rmse": 0.01491541858489804,
+      "sampled_hausdorff": 0.034966308883287944,
+      "topology_matches": 22
+    },
+    {
+      "method": "pg_isolines",
+      "dim": 2,
+      "fields": 24,
+      "band_rmse": 0.015529174669300826,
+      "sampled_hausdorff": 0.03350875197733635,
+      "topology_matches": 23
+    },
+    {
+      "method": "wendland_c2_grid",
+      "dim": 2,
+      "fields": 24,
+      "band_rmse": 0.014500304668716246,
+      "sampled_hausdorff": 0.03223149964711931,
+      "topology_matches": 22
+    },
+    {
+      "method": "wendland_c2_isolines",
+      "dim": 2,
+      "fields": 24,
+      "band_rmse": 0.016128534835115955,
+      "sampled_hausdorff": 0.032780083924931265,
+      "topology_matches": 22
+    },
+    {
+      "method": "wendland_c4_grid",
+      "dim": 2,
+      "fields": 24,
+      "band_rmse": 0.013958112975575476,
+      "sampled_hausdorff": 0.0343221351758151,
+      "topology_matches": 22
+    },
+    {
+      "method": "wendland_c4_isolines",
+      "dim": 2,
+      "fields": 24,
+      "band_rmse": 0.01585978521137925,
+      "sampled_hausdorff": 0.03090667004054029,
+      "topology_matches": 22
+    },
+    {
+      "method": "cubic",
+      "dim": 3,
+      "fields": 12,
+      "band_rmse": 0.017939705358667297,
+      "sampled_hausdorff": 0.0493601136037684,
+      "topology_matches": 12
+    },
+    {
+      "method": "cubic_redistance",
+      "dim": 3,
+      "fields": 12,
+      "band_rmse": 0.10645709578495963,
+      "sampled_hausdorff": 0.11792742411295576,
+      "topology_matches": 12
+    },
+    {
+      "method": "linear",
+      "dim": 3,
+      "fields": 12,
+      "band_rmse": 0.069267675751718,
+      "sampled_hausdorff": 0.14773358260190333,
+      "topology_matches": 12
+    },
+    {
+      "method": "pg_grid",
+      "dim": 3,
+      "fields": 12,
+      "band_rmse": 0.019358905148754116,
+      "sampled_hausdorff": 0.043010252724208095,
+      "topology_matches": 12
+    },
+    {
+      "method": "pg_isolines",
+      "dim": 3,
+      "fields": 12,
+      "band_rmse": 0.05253142318122367,
+      "sampled_hausdorff": 0.17335394509026048,
+      "topology_matches": 8
+    },
+    {
+      "method": "wendland_c2_grid",
+      "dim": 3,
+      "fields": 12,
+      "band_rmse": 0.01753032453912947,
+      "sampled_hausdorff": 0.052675467097797773,
+      "topology_matches": 12
+    },
+    {
+      "method": "wendland_c2_isolines",
+      "dim": 3,
+      "fields": 12,
+      "band_rmse": 0.021977293269587684,
+      "sampled_hausdorff": 0.04802000093599248,
+      "topology_matches": 12
+    },
+    {
+      "method": "wendland_c4_grid",
+      "dim": 3,
+      "fields": 12,
+      "band_rmse": 0.014983148838209934,
+      "sampled_hausdorff": 0.046995131085093456,
+      "topology_matches": 12
+    },
+    {
+      "method": "wendland_c4_isolines",
+      "dim": 3,
+      "fields": 12,
+      "band_rmse": 0.024959290857823023,
+      "sampled_hausdorff": 0.05764425852426407,
+      "topology_matches": 12
+    }
+  ],
+  "aggregation": "Boundary table: offset=0 only, one row per method/shape/seed/h; medians of E_0 and H_0 and counts of digital-topology matches, with all 24 2D and 12 3D fields retained per method. Legacy errors table: median of all successful offset rows by method/dimension; seed range of three seed medians. Resource and editing table: torus h=.4, recorded medians; editing error median over three shifts.",
   "note": "Only two stored 2D configurations reconstructed for figures. No tuning or benchmark timings rerun."
 }
